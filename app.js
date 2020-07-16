@@ -12,17 +12,20 @@
         this.hidden = hidden;
     }
     draw(ctx, self, poss) {
-        this.isActive = poss.findIndex(p=>{
+        const index = poss.findIndex(p=>{
             return (this.left < p.PosX && p.PosX < this.right && 
                 this.top < p.PosY && p.PosY < this.bottom);
-        }) >= 0;
+        });
+        if (index >= 0) {
+            this.isActive = true;
+        }
 
         if (this.isActive) {
             ctx.save();
             ctx.translate(canvas.width/2, canvas.height/2);
             ctx.scale(scale, scale);
             ctx.translate(-self.PosX, -self.PosY);
-            ctx.fillStyle = "rgba(" + [200, 200, 150, 0.30] + ")";
+            ctx.fillStyle = "rgba(200, 200, 150, 0.30)";
             ctx.fillRect(this.left, this.top, this.right-this.left, this.bottom-this.top);
             ctx.font = "8px Arial";
             ctx.fillText(this.label ? this.label : '', this.left, this.top-1);
@@ -70,12 +73,52 @@
             ctx.translate(canvas.width/2, canvas.height/2);
             ctx.scale(scale, scale);
             ctx.translate(-self.PosX, -self.PosY);
-            ctx.fillStyle = "rgba(" + [128, 128, 255, 0.10] + ")";
+            ctx.fillStyle = "rgba(128, 128, 255, 0.10)";
             ctx.fillRect(this.left, this.top, this.right-this.left, this.bottom-this.top);
             ctx.restore();
         }
     }
 }
+class Passage {
+    constructor(roomA, roomB) {
+        this.roomA = roomA;
+        this.roomB = roomB;
+        this.horizontal = (this.roomB.left-this.roomA.left) > (this.roomB.top-this.roomA.top);
+        this.midX = this.horizontal ?  
+            (this.roomA.right+this.roomB.left)/2:
+            ((this.roomA.left+this.roomA.right)/2 + (this.roomB.left+this.roomB.right)/2)/2;
+        this.midY = this.hirizontal ?
+            ((this.roomA.top+this.roomA.bottom)/2 + (this.roomB.top+this.roomB.bottom)/2)/2:
+            (this.roomA.bottom+this.roomB.top)/2;
+    }
+    draw(ctx, self) {
+        if (this.roomA.isActive && this.roomB.isActive) {
+            ctx.save();
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.scale(scale, scale);
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(200, 200, 150, 0.20)";
+            ctx.lineWidth = 10;
+            if (this.horizontal) {
+                ctx.moveTo(this.roomA.right-self.PosX,(this.roomA.bottom+this.roomA.top)/2-self.PosY);
+                ctx.lineTo(this.midX-self.PosX,(this.roomA.bottom+this.roomA.top)/2-self.PosY);
+                ctx.lineTo(this.midX-self.PosX,(this.roomB.bottom+this.roomB.top)/2-self.PosY);
+                ctx.lineTo(this.roomB.left-self.PosX,(this.roomB.bottom+this.roomB.top)/2-self.PosY);
+            }
+            else {
+                ctx.moveTo((this.roomA.right+this.roomA.left)/2-self.PosX,this.roomA.bottom-self.PosY);
+                ctx.lineTo((this.roomA.right+this.roomA.left)/2-self.PosX,this.midY-self.PosY);
+                ctx.lineTo((this.roomB.right+this.roomB.left)/2-self.PosX,this.midY-self.PosY);
+                ctx.lineTo((this.roomB.right+this.roomB.left)/2-self.PosX,this.roomB.top-self.PosY);
+            }
+            ctx.stroke();
+            ctx.closePath();
+    ctx.restore();
+        }
+    }
+}
+
+
 class DDManager {
     constructor() {
         this.inDD = false;
@@ -135,6 +178,49 @@ class DDManager {
             new Room(275, 349, 324, 398, 'D1'),
 
             new Room(-123, 81, -78, 118, 'E1'),
+        ];
+        this.passages = [
+            new Passage(this.rooms[0], this.rooms[4]),
+            new Passage(this.rooms[1], this.rooms[5]),
+            new Passage(this.rooms[2], this.rooms[6]),
+            new Passage(this.rooms[3], this.rooms[4]),
+            new Passage(this.rooms[5], this.rooms[6]),
+            new Passage(this.rooms[6], this.rooms[7]),
+            new Passage(this.rooms[4], this.rooms[9]),
+            new Passage(this.rooms[5], this.rooms[10]),
+            new Passage(this.rooms[6], this.rooms[11]),
+            new Passage(this.rooms[8], this.rooms[9]),
+            new Passage(this.rooms[11], this.rooms[12]),
+            new Passage(this.rooms[9], this.rooms[14]),
+            new Passage(this.rooms[10], this.rooms[15]),
+            new Passage(this.rooms[11], this.rooms[16]),
+            new Passage(this.rooms[13], this.rooms[14]),
+            new Passage(this.rooms[14], this.rooms[15]),
+            new Passage(this.rooms[16], this.rooms[17]),
+            new Passage(this.rooms[14], this.rooms[18]),
+            new Passage(this.rooms[15], this.rooms[19]),
+            new Passage(this.rooms[16], this.rooms[20]),
+
+            new Passage(this.rooms[21], this.rooms[25]),
+            new Passage(this.rooms[22], this.rooms[26]),
+            new Passage(this.rooms[23], this.rooms[27]),
+            new Passage(this.rooms[24], this.rooms[25]),
+            new Passage(this.rooms[25], this.rooms[26]),
+            new Passage(this.rooms[26], this.rooms[27]),
+            new Passage(this.rooms[27], this.rooms[28]),
+            new Passage(this.rooms[26], this.rooms[31]),
+            new Passage(this.rooms[29], this.rooms[30]),
+            new Passage(this.rooms[30], this.rooms[31]),
+            new Passage(this.rooms[31], this.rooms[32]),
+            new Passage(this.rooms[32], this.rooms[33]),
+            new Passage(this.rooms[31], this.rooms[36]),
+            new Passage(this.rooms[34], this.rooms[35]),
+            new Passage(this.rooms[35], this.rooms[36]),
+            new Passage(this.rooms[36], this.rooms[37]),
+            new Passage(this.rooms[37], this.rooms[38]),
+            new Passage(this.rooms[35], this.rooms[39]),
+            new Passage(this.rooms[36], this.rooms[40]),
+            new Passage(this.rooms[37], this.rooms[41]),
         ];
         this.trapPredictions = [];
     }
@@ -209,6 +295,10 @@ class DDManager {
 
         this.rooms.forEach(r => {
             r.draw(ctx, self, poss);
+        })
+
+        this.passages.forEach(r => {
+            r.draw(ctx, self);
         })
 
         e.mobs.filter(m=>{return m.HPP > 0.0}).forEach(m => {
@@ -529,7 +619,7 @@ document.addEventListener("wheel", function(e) {
     }
     else if (e.deltaY == 100) {
         scale /= 1.20;
-        scale = Math.max(scale, 0.4);
+        scale = Math.max(scale, 0.8);
     }
 });
 function debug(e) {
