@@ -372,17 +372,6 @@ class DDManager {
             ctx.restore();
         });
 
-        if (e.cairnOfPassage) {
-            ctx.save();
-            ctx.translate(canvas.width/2, canvas.height/2);
-            ctx.scale(scale, scale);
-            ctx.translate(e.cairnOfPassage.PosX-self.PosX, e.cairnOfPassage.PosY-self.PosY);
-            ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
-            ctx.drawImage(imgCairnOfPassage, -5, -5, 10, 10);
-            ctx.closePath();
-            ctx.restore();
-        }
-
         if (e.cairnOfReturn) {
             ctx.save();
             ctx.translate(canvas.width/2, canvas.height/2);
@@ -427,6 +416,16 @@ class DDManager {
             ctx.restore();
         });
 
+        if (e.cairnOfPassage) {
+            ctx.save();
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.scale(scale, scale);
+            ctx.translate(e.cairnOfPassage.PosX-self.PosX, e.cairnOfPassage.PosY-self.PosY);
+            ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+            ctx.drawImage(imgCairnOfPassage, -5, -5, 10, 10);
+            ctx.closePath();
+            ctx.restore();
+        }
 
     }
 
