@@ -211,6 +211,7 @@ class DDManager {
             new Passage(this.rooms[27], this.rooms[28]),
             new Passage(this.rooms[25], this.rooms[30]),
             new Passage(this.rooms[26], this.rooms[31]),
+            new Passage(this.rooms[27], this.rooms[32]),
             new Passage(this.rooms[29], this.rooms[30]),
             new Passage(this.rooms[30], this.rooms[31]),
             new Passage(this.rooms[31], this.rooms[32]),
