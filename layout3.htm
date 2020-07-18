@@ -1,0 +1,43 @@
+<html>
+    <head id="head">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="dd.css">
+        <title>Palace of the Dead</title>
+    </head>
+    <body>
+        <div id="app">
+            <div id="canvasWrapper">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+    </body>
+    <script src="modules/Room.js"></script>
+    <script src="modules/Passage.js"></script>
+    <script src="modules/Layout.js"></script>
+    <script src="modules/DDUtility.js"></script>
+    <script>
+        const layout = layoutExit;
+        layout.rooms.forEach(r=>r.isActive=true);
+
+        let canvas = document.getElementById('canvas');
+        canvas.width = document.querySelector("#canvasWrapper").offsetWidth;
+        canvas.height = canvas.width;
+        console.log(canvas.width)
+        const scale = canvas.width / 1000;
+        if (canvas.getContext) {
+            const ctx = canvas.getContext('2d');        
+
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+
+            ctx.save();
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.scale(scale, scale);
+
+            layout.draw(ctx, {PosX:0, PosY:0}, scale);
+            ctx.restore();
+        }
+
+    </script>
+</html>

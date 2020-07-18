@@ -20,14 +20,14 @@ html {
     box-sizing: border-box;
 }
 
-#ddHeader {
+.ddHeader {
     background-color: blue;
     color: white;
     font-size: 20px;
     padding: 3px;
 }
 
-#ddHeader.passageok {
+.ddHeader.passageok {
     background: rgba(255, 0, 0, 1.0);
 }
 
@@ -39,7 +39,14 @@ html {
     background-color: transparent;
 }
 
-#ddFooter, pre, #traplist, .debug {
+#ddFooter {
+    background: rgba(0, 0, 0, 1.0);
+    color: #fff;
+    padding: 5px;
+    font: 30px monospace;
+}
+
+pre, #traplist, .debug {
     word-break: break-all;
     white-space: pre-wrap;
     background: rgba(0, 0, 0, 0.7);
