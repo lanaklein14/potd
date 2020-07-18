@@ -40,10 +40,10 @@ html {
 }
 
 #ddFooter {
-    background: rgba(0, 0, 0, 1.0);
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
     padding: 5px;
-    font: 30px monospace;
+    font: 40px monospace;
 }
 
 pre, #traplist, .debug {
