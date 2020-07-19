@@ -231,7 +231,7 @@ const layout51_80_151_180 = new Layout([
     new Room('A6', 295, -375, 329, -340), //見直しOK
     new Room('A7', 351, -362, 386, -328), //見直しOK
     new Room('A8', 407, -380, 442, -334), //見直しOK
-    new Room('A9', 171, -318, 205, -283), //見直しOK
+    new Room('A9', 170, -319, 205, -282), //見直しOK
     new Room('A10', 225, -305, 260, -270), //見直しOK
     new Room('A11', 281, -319, 318, -282), //見直しOK
     new Room('A12', 338, -307, 373, -270), //見直しOK
@@ -267,12 +267,8 @@ const layout51_80_151_180 = new Layout([
     new Room('B20', -298, 394, -263, 430), //見直しOK
     new Room('B21', -243, 410, -207, 446), //見直しOK
 
-    new Room('C1', -309, -364, -293, -348, true), 
-    new Room('C2', -319, -323, -282, -286), //見直しOK
-    new Room('C3', -326, -247, -275, -195), //見直しOK
-
-    new Room('D1', 284, 173, 311, 200, true), 
-    new Room('D2', 275, 272, 324, 324, true), 
+    new Room('C1', -319, -323, -282, -286), //見直しOK
+    new Room('C2', -326, -247, -275, -195), //見直しOK
 ]);
 layout51_80_151_180.addPassage('A1', 'A5');
 layout51_80_151_180.addPassage('A2', 'A6');
@@ -323,8 +319,6 @@ layout51_80_151_180.addPassage('B15', 'B16');
 layout51_80_151_180.addPassage('B16', 'B17');
 layout51_80_151_180.addPassage('B17', 'B18');
 layout51_80_151_180.addPassage('C1', 'C2');
-layout51_80_151_180.addPassage('C2', 'C3');
-layout51_80_151_180.addPassage('D1', 'D2');
 
 const layout81_100_181_200 = new Layout([
     new Room('A1', 225, -426, 262, -385, true), //下
