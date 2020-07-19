@@ -321,7 +321,7 @@ layout51_80_151_180.addPassage('B17', 'B18');
 layout51_80_151_180.addPassage('C1', 'C2');
 
 const layout81_100_181_200 = new Layout([
-    new Room('A1', 225, -426, 262, -385, true), //下
+    new Room('A1', 230, -416, 253, -385), //見直しOK
     new Room('A2', 270, -434, 310, -398), //見直しOK
     new Room('A3', 361, -426, 407, -390, true),
     new Room('A4', 177, -362, 219, -330), //見直しOK
@@ -350,7 +350,7 @@ const layout81_100_181_200 = new Layout([
     new Room('B5', -376, 222, -343, 262), //見直しOK
     new Room('B6', -317, 227, -283, 262), //見直しOK
     new Room('B7', -250, 235, -219, 271), //見直しOK
-    new Room('B8', -201, 238, -156, 274, true),
+    new Room('B8', -198, 234, -164, 271), //見直しOK
     new Room('B9', -443, 284, -406, 318), //見直しOK
     new Room('B10', -387, 283, -351, 318), //見直しOK
     new Room('B11', -319, 280, -283, 320), //見直しOK
@@ -426,7 +426,8 @@ const layoutExit = new Layout([
     new Room('Exit B1-B10', -123, 81, -78, 118),
     new Room('Exit B51-B60', -215, -216, -185, -185),
     new Room('Exit B61-B70', -215, -116, -185, -85),
-    new Room('Exit B71-B80', -215, -16, -185, 15)
+    new Room('Exit B71-B80', -215, -16, -185, 15),
+    new Room('Exit B81-B90', -315, -16, -283, 15)
 ]);
 
 
