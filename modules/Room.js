@@ -1,10 +1,11 @@
 ﻿class Room {
-    constructor(name, left, top, right, bottom) {
+    constructor(name, left, top, right, bottom, needVerify=false) {
         this.name = name;
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
+        this.needVerify = needVerify;
         this.traps = [];
         this.accursedHoards = [];
         this.isActive = false;
@@ -37,7 +38,7 @@
         if (this.isActive) {
             ctx.save();
             ctx.translate(-origin.PosX, -origin.PosY);
-            ctx.fillStyle = "rgba(200, 200, 150, 0.30)";
+            ctx.fillStyle = this.needVerify ? "rgba(200, 200, 0, 0.30)" : "rgba(200, 200, 150, 0.30)";
             ctx.fillRect(this.left, this.top, this.right-this.left, this.bottom-this.top);
             ctx.font = "8px Arial";
             ctx.fillText(this.name ? this.name : '', this.left, this.top-1);

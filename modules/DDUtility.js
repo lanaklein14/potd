@@ -1,5 +1,5 @@
 ﻿const layout01_50_101_150 = new Layout([
-    new Room('A1', 224, -422, 260, -384),
+    new Room('A1', 224, -422, 260, -384, true),
     new Room('A2', 269, -435, 314, -399), //見直しOK
     new Room('A3', 369, -423, 406, -386), //見直しOK
     new Room('A4', 180, -364, 217, -328), //見直しOK
@@ -11,15 +11,15 @@
     new Room('A10', 224, -306, 259, -270), //見直しOK
     new Room('A11', 282, -318, 317, -283), //見直しOK
     new Room('A12', 346, -318, 389, -282), //見直しOK
-    new Room('A13', 412, -330, 448, -294),
+    new Room('A13', 412, -330, 448, -294, true),
     new Room('A14', 165, -249, 202, -212), //見直しOK
     new Room('A15', 224, -261, 259, -224), //見直しOK
-    new Room('A16', 283, -259, 317, -225),
+    new Room('A16', 283, -259, 317, -225, true),
     new Room('A17', 348, -273, 383, -237), //見直しOK
-    new Room('A18', 400, -272, 437, -236),
+    new Room('A18', 400, -272, 437, -236, true),
     new Room('A19', 223, -206, 260, -162), //見直しOK
-    new Room('A20', 301, -201, 336, -167),
-    new Room('A21', 360, -214, 395, -178),
+    new Room('A20', 301, -201, 336, -167, true),
+    new Room('A21', 360, -214, 395, -178, true),
 
     new Room('B1', -394, 169, -357, 206), //見直しOK
     new Room('B2', -307, 162, -270, 206), //見直しOK
@@ -29,17 +29,17 @@
     new Room('B6', -318, 225, -283, 262), //見直しOK
     new Room('B7', -254, 238, -217, 274), //見直しOK
     new Room('B8', -201, 238, -157, 274), //見直しOK
-    new Room('B9', -438, 281, -396, 317),
+    new Room('B9', -438, 281, -396, 317, true),
     new Room('B10', -384, 283, -350, 317), //見直しOK
     new Room('B11', -318, 278, -283, 321), //見直しOK
-    new Room('B12', -253, 297, -217, 331),
-    new Room('B13', -199, 292, -163, 335),
-    new Room('B14', -427, 340, -389, 376),
-    new Room('B15', -375, 340, -337, 376),
+    new Room('B12', -253, 297, -217, 331, true),
+    new Room('B13', -199, 292, -163, 335, true),
+    new Room('B14', -427, 340, -389, 376, true),
+    new Room('B15', -375, 340, -337, 376, true),
     new Room('B16', -318, 340, -282, 375), //見直しOK
     new Room('B17', -254, 352, -218, 387), //見直しOK
-    new Room('B18', -197, 352, -163, 388),
-    new Room('B19', -388, 396, -345, 432),
+    new Room('B18', -197, 352, -163, 388, true),
+    new Room('B19', -388, 396, -345, 432, true),
     new Room('B20', -339, 397, -302, 433), //見直しOK
     new Room('B21', -242, 407, -205, 444), //見直しOK
 
@@ -222,7 +222,7 @@ layout01_50_101_150.addAccursedHoard(-366.92, 414.01);
 layout01_50_101_150.addAccursedHoard(-320.02, 414.94);
 
 
-const layout51_100_151_200 = new Layout([
+const layout51_80_151_180 = new Layout([
     new Room('A1', 225, -426, 262, -391), //見直しOK
     new Room('A2', 270, -431, 313, -397), //見直しOK
     new Room('A3', 361, -426, 407, -390), //見直しOK
@@ -231,7 +231,7 @@ const layout51_100_151_200 = new Layout([
     new Room('A6', 295, -375, 329, -340), //見直しOK
     new Room('A7', 351, -362, 386, -328), //見直しOK
     new Room('A8', 407, -380, 442, -334), //見直しOK
-    new Room('A9', 166, -318, 202, -282),
+    new Room('A9', 166, -318, 202, -282, true),
     new Room('A10', 225, -305, 260, -270), //見直しOK
     new Room('A11', 281, -319, 318, -282), //見直しOK
     new Room('A12', 338, -307, 373, -270), //見直しOK
@@ -240,19 +240,19 @@ const layout51_100_151_200 = new Layout([
     new Room('A15', 225, -255, 261, -210), //見直しOK
     new Room('A16', 281, -262, 318, -225), //見直しOK
     new Room('A17', 340, -255, 374, -210), //見直しOK
-    new Room('A18', 400, -272, 437, -236),
-    new Room('A19', 219, -190, 248, -153), //見直しOK0
+    new Room('A18', 400, -272, 437, -236, true),
+    new Room('A19', 219, -190, 248, -153, true), 
     new Room('A20', 301, -206, 337, -170), //見直しOK
-    new Room('A21', 360, -214, 395, -178),
+    new Room('A21', 360, -214, 395, -178, true),
 
-    new Room('B1', -393, 170, -357, 206),
+    new Room('B1', -393, 170, -357, 206, true),
     new Room('B2', -307, 161, -270, 206), //見直しOK
     new Room('B3', -243, 181, -206, 217), //見直しOK
-    new Room('B4', -419, 227, -383, 261),
+    new Room('B4', -419, 227, -383, 261, true),
     new Room('B5', -371, 225, -334, 262), //見直しOK
     new Room('B6', -319, 226, -282, 262), //見直しOK
     new Room('B7', -255, 239, -218, 273), //見直しOK
-    new Room('B8', -201, 238, -156, 274),
+    new Room('B8', -201, 238, -156, 274, true),
     new Room('B9', -436, 281, -398, 317), //見直しOK
     new Room('B10', -383, 281, -346, 318), //見直しOK
     new Room('B11', -316, 277, -283, 320), //見直しOK
@@ -267,71 +267,174 @@ const layout51_100_151_200 = new Layout([
     new Room('B20', -298, 394, -263, 430), //見直しOK
     new Room('B21', -243, 410, -207, 446), //見直しOK
 
-    new Room('C1', -309, -364, -293, -348), //見直しOK0
+    new Room('C1', -309, -364, -293, -348, true), 
     new Room('C2', -319, -323, -282, -286), //見直しOK
     new Room('C3', -326, -247, -275, -195), //見直しOK
 
-    new Room('D1', 284, 173, 311, 200), //見直しOK0
-    new Room('D2', 275, 272, 324, 324), //見直しOK0
+    new Room('D1', 284, 173, 311, 200, true), 
+    new Room('D2', 275, 272, 324, 324, true), 
 ]);
-layout51_100_151_200.addPassage('A1', 'A5');
-layout51_100_151_200.addPassage('A2', 'A6');
-layout51_100_151_200.addPassage('A3', 'A7');
-layout51_100_151_200.addPassage('A5', 'A10');
-layout51_100_151_200.addPassage('A6', 'A11');
-layout51_100_151_200.addPassage('A7', 'A12');
-layout51_100_151_200.addPassage('A10', 'A15');
-layout51_100_151_200.addPassage('A11', 'A16');
-layout51_100_151_200.addPassage('A12', 'A17');
-layout51_100_151_200.addPassage('A15', 'A19');
-layout51_100_151_200.addPassage('A16', 'A20');
-layout51_100_151_200.addPassage('A17', 'A21');
-layout51_100_151_200.addPassage('A4', 'A5');
-layout51_100_151_200.addPassage('A5', 'A6');
-layout51_100_151_200.addPassage('A6', 'A7');
-layout51_100_151_200.addPassage('A7', 'A8');
-layout51_100_151_200.addPassage('A9', 'A10');
-layout51_100_151_200.addPassage('A10', 'A11');
-layout51_100_151_200.addPassage('A11', 'A12');
-layout51_100_151_200.addPassage('A12', 'A13');
-layout51_100_151_200.addPassage('A14', 'A15');
-layout51_100_151_200.addPassage('A15', 'A16');
-layout51_100_151_200.addPassage('A16', 'A17');
-layout51_100_151_200.addPassage('A17', 'A18');
-layout51_100_151_200.addPassage('B1', 'B5');
-layout51_100_151_200.addPassage('B2', 'B6');
-layout51_100_151_200.addPassage('B3', 'B7');
-layout51_100_151_200.addPassage('B5', 'B10');
-layout51_100_151_200.addPassage('B6', 'B11');
-layout51_100_151_200.addPassage('B7', 'B12');
-layout51_100_151_200.addPassage('B10', 'B15');
-layout51_100_151_200.addPassage('B11', 'B16');
-layout51_100_151_200.addPassage('B12', 'B17');
-layout51_100_151_200.addPassage('B15', 'B19');
-layout51_100_151_200.addPassage('B16', 'B20');
-layout51_100_151_200.addPassage('B17', 'B21');
-layout51_100_151_200.addPassage('B4', 'B5');
-layout51_100_151_200.addPassage('B5', 'B6');
-layout51_100_151_200.addPassage('B6', 'B7');
-layout51_100_151_200.addPassage('B7', 'B8');
-layout51_100_151_200.addPassage('B9', 'B10');
-layout51_100_151_200.addPassage('B10', 'B11');
-layout51_100_151_200.addPassage('B11', 'B12');
-layout51_100_151_200.addPassage('B12', 'B13');
-layout51_100_151_200.addPassage('B14', 'B15');
-layout51_100_151_200.addPassage('B15', 'B16');
-layout51_100_151_200.addPassage('B16', 'B17');
-layout51_100_151_200.addPassage('B17', 'B18');
-layout51_100_151_200.addPassage('C1', 'C2');
-layout51_100_151_200.addPassage('C2', 'C3');
-layout51_100_151_200.addPassage('D1', 'D2');
+layout51_80_151_180.addPassage('A1', 'A5');
+layout51_80_151_180.addPassage('A2', 'A6');
+layout51_80_151_180.addPassage('A3', 'A7');
+layout51_80_151_180.addPassage('A5', 'A10');
+layout51_80_151_180.addPassage('A6', 'A11');
+layout51_80_151_180.addPassage('A7', 'A12');
+layout51_80_151_180.addPassage('A10', 'A15');
+layout51_80_151_180.addPassage('A11', 'A16');
+layout51_80_151_180.addPassage('A12', 'A17');
+layout51_80_151_180.addPassage('A15', 'A19');
+layout51_80_151_180.addPassage('A16', 'A20');
+layout51_80_151_180.addPassage('A17', 'A21');
+layout51_80_151_180.addPassage('A4', 'A5');
+layout51_80_151_180.addPassage('A5', 'A6');
+layout51_80_151_180.addPassage('A6', 'A7');
+layout51_80_151_180.addPassage('A7', 'A8');
+layout51_80_151_180.addPassage('A9', 'A10');
+layout51_80_151_180.addPassage('A10', 'A11');
+layout51_80_151_180.addPassage('A11', 'A12');
+layout51_80_151_180.addPassage('A12', 'A13');
+layout51_80_151_180.addPassage('A14', 'A15');
+layout51_80_151_180.addPassage('A15', 'A16');
+layout51_80_151_180.addPassage('A16', 'A17');
+layout51_80_151_180.addPassage('A17', 'A18');
+layout51_80_151_180.addPassage('B1', 'B5');
+layout51_80_151_180.addPassage('B2', 'B6');
+layout51_80_151_180.addPassage('B3', 'B7');
+layout51_80_151_180.addPassage('B5', 'B10');
+layout51_80_151_180.addPassage('B6', 'B11');
+layout51_80_151_180.addPassage('B7', 'B12');
+layout51_80_151_180.addPassage('B10', 'B15');
+layout51_80_151_180.addPassage('B11', 'B16');
+layout51_80_151_180.addPassage('B12', 'B17');
+layout51_80_151_180.addPassage('B15', 'B19');
+layout51_80_151_180.addPassage('B16', 'B20');
+layout51_80_151_180.addPassage('B17', 'B21');
+layout51_80_151_180.addPassage('B4', 'B5');
+layout51_80_151_180.addPassage('B5', 'B6');
+layout51_80_151_180.addPassage('B6', 'B7');
+layout51_80_151_180.addPassage('B7', 'B8');
+layout51_80_151_180.addPassage('B9', 'B10');
+layout51_80_151_180.addPassage('B10', 'B11');
+layout51_80_151_180.addPassage('B11', 'B12');
+layout51_80_151_180.addPassage('B12', 'B13');
+layout51_80_151_180.addPassage('B14', 'B15');
+layout51_80_151_180.addPassage('B15', 'B16');
+layout51_80_151_180.addPassage('B16', 'B17');
+layout51_80_151_180.addPassage('B17', 'B18');
+layout51_80_151_180.addPassage('C1', 'C2');
+layout51_80_151_180.addPassage('C2', 'C3');
+layout51_80_151_180.addPassage('D1', 'D2');
 
+const layout81_100_181_200 = new Layout([
+    new Room('A1', 225, -426, 262, -385, true), //下
+    new Room('A2', 270, -431, 313, -397, true),
+    new Room('A3', 361, -426, 407, -390, true),
+    new Room('A4', 185, -362, 220, -327, true), //右
+    new Room('A5', 237, -363, 274, -330), //見直しOK
+    new Room('A6', 295, -375, 329, -340), //見直しOK
+    new Room('A7', 351, -362, 386, -328, true),
+    new Room('A8', 407, -380, 442, -334, true),
+    new Room('A9', 166, -318, 202, -282, true),
+    new Room('A10', 225, -305, 260, -270, true),
+    new Room('A11', 281, -320, 318, -282, true), //上右
+    new Room('A12', 350, -316, 386, -283), //見直しOK
+    new Room('A13', 397, -307, 442, -270, true),
+    new Room('A14', 173, -251, 208, -215, true),
+    new Room('A15', 225, -255, 261, -210, true),
+    new Room('A16', 281, -262, 318, -225, true),
+    new Room('A17', 350, -269, 387, -231), //見直しOK
+    new Room('A18', 405, -269, 444, -233), //見直しOK
+    new Room('A19', 219, -190, 248, -153, true),
+    new Room('A20', 301, -206, 337, -170, true),
+    new Room('A21', 360, -215, 398, -174), //見直しOK
+
+    new Room('B1', -393, 170, -357, 206, true),
+    new Room('B2', -307, 161, -270, 206, true),
+    new Room('B3', -243, 181, -206, 217, true),
+    new Room('B4', -419, 227, -383, 261, true),
+    new Room('B5', -371, 225, -334, 262, true),
+    new Room('B6', -319, 226, -282, 262, true),
+    new Room('B7', -255, 239, -218, 273, true),
+    new Room('B8', -201, 238, -156, 274, true),
+    new Room('B9', -436, 281, -398, 317, true),
+    new Room('B10', -383, 281, -346, 318, true),
+    new Room('B11', -316, 277, -283, 320, true),
+    new Room('B12', -253, 293, -217, 330, true),
+    new Room('B13', -201, 290, -166, 332, true),
+    new Room('B14', -423, 337, -389, 374, true),
+    new Room('B15', -371, 337, -334, 375, true),
+    new Room('B16', -317, 340, -282, 375, true),
+    new Room('B17', -255, 345, -219, 389, true),
+    new Room('B18', -204, 350, -167, 385, true),
+    new Room('B19', -387, 396, -342, 429, true),
+    new Room('B20', -298, 394, -263, 430, true),
+    new Room('B21', -243, 410, -207, 446, true),
+
+    new Room('C1', -309, -364, -293, -348, true),
+    new Room('C2', -319, -323, -282, -286, true),
+    new Room('C3', -326, -247, -275, -195, true),
+
+    new Room('D1', 284, 173, 311, 200, true),
+    new Room('D2', 275, 272, 324, 324, true),
+]);
+layout81_100_181_200.addPassage('A1', 'A5');
+layout81_100_181_200.addPassage('A2', 'A6');
+layout81_100_181_200.addPassage('A3', 'A7');
+layout81_100_181_200.addPassage('A5', 'A10');
+layout81_100_181_200.addPassage('A6', 'A11');
+layout81_100_181_200.addPassage('A7', 'A12');
+layout81_100_181_200.addPassage('A10', 'A15');
+layout81_100_181_200.addPassage('A11', 'A16');
+layout81_100_181_200.addPassage('A12', 'A17');
+layout81_100_181_200.addPassage('A15', 'A19');
+layout81_100_181_200.addPassage('A16', 'A20');
+layout81_100_181_200.addPassage('A17', 'A21');
+layout81_100_181_200.addPassage('A4', 'A5');
+layout81_100_181_200.addPassage('A5', 'A6');
+layout81_100_181_200.addPassage('A6', 'A7');
+layout81_100_181_200.addPassage('A7', 'A8');
+layout81_100_181_200.addPassage('A9', 'A10');
+layout81_100_181_200.addPassage('A10', 'A11');
+layout81_100_181_200.addPassage('A11', 'A12');
+layout81_100_181_200.addPassage('A12', 'A13');
+layout81_100_181_200.addPassage('A14', 'A15');
+layout81_100_181_200.addPassage('A15', 'A16');
+layout81_100_181_200.addPassage('A16', 'A17');
+layout81_100_181_200.addPassage('A17', 'A18');
+layout81_100_181_200.addPassage('B1', 'B5');
+layout81_100_181_200.addPassage('B2', 'B6');
+layout81_100_181_200.addPassage('B3', 'B7');
+layout81_100_181_200.addPassage('B5', 'B10');
+layout81_100_181_200.addPassage('B6', 'B11');
+layout81_100_181_200.addPassage('B7', 'B12');
+layout81_100_181_200.addPassage('B10', 'B15');
+layout81_100_181_200.addPassage('B11', 'B16');
+layout81_100_181_200.addPassage('B12', 'B17');
+layout81_100_181_200.addPassage('B15', 'B19');
+layout81_100_181_200.addPassage('B16', 'B20');
+layout81_100_181_200.addPassage('B17', 'B21');
+layout81_100_181_200.addPassage('B4', 'B5');
+layout81_100_181_200.addPassage('B5', 'B6');
+layout81_100_181_200.addPassage('B6', 'B7');
+layout81_100_181_200.addPassage('B7', 'B8');
+layout81_100_181_200.addPassage('B9', 'B10');
+layout81_100_181_200.addPassage('B10', 'B11');
+layout81_100_181_200.addPassage('B11', 'B12');
+layout81_100_181_200.addPassage('B12', 'B13');
+layout81_100_181_200.addPassage('B14', 'B15');
+layout81_100_181_200.addPassage('B15', 'B16');
+layout81_100_181_200.addPassage('B16', 'B17');
+layout81_100_181_200.addPassage('B17', 'B18');
+layout81_100_181_200.addPassage('C1', 'C2');
+layout81_100_181_200.addPassage('C2', 'C3');
+layout81_100_181_200.addPassage('D1', 'D2');
 
 const layoutExit = new Layout([
     new Room('Exit B1-B10', -123, 81, -78, 118),
     new Room('Exit B51-B60', -215, -216, -185, -185),
     new Room('Exit B61-B70', -215, -116, -185, -85),
-    //    new Room('Exit B71-B80', -371, 338, -355, 373),
+    new Room('Exit B71-B80', -215, -16, -185, 15)
 ]);
 
 
@@ -360,23 +463,23 @@ class DDUtility {
             },
             593: {
                 baseFloor: 51,
-                layout: layout51_100_151_200
+                layout: layout51_80_151_180
             },
             594: {
                 baseFloor: 61,
-                layout: layout51_100_151_200
+                layout: layout51_80_151_180
             },
             595: {
                 baseFloor: 71,
-                layout: layout51_100_151_200
+                layout: layout51_80_151_180
             },
             596: {
                 baseFloor: 81,
-                layout: layout51_100_151_200
+                layout: layout81_100_181_200
             },
             597: {
                 baseFloor: 91,
-                layout: layout51_100_151_200
+                layout: layout81_100_181_200
             },
             598: {
                 baseFloor: 101,
@@ -400,23 +503,23 @@ class DDUtility {
             },
             603: {
                 baseFloor: 151,
-                layout: layout51_100_151_200
+                layout: layout51_80_151_180
             },
             604: {
                 baseFloor: 161,
-                layout: layout51_100_151_200
+                layout: layout51_80_151_180
             },
             605: {
                 baseFloor: 171,
-                layout: layout51_100_151_200
+                layout: layout51_80_151_180
             },
             606: {
                 baseFloor: 181,
-                layout: layout51_100_151_200
+                layout: layout81_100_181_200
             },
             607: {
                 baseFloor: 191,
-                layout: layout51_100_151_200
+                layout: layout81_100_181_200
             },
             570: {
                 baseFloor: 0,

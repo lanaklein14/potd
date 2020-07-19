@@ -1,0 +1,93 @@
+﻿* {
+    font-family: "Meiryo";
+    font-size: 12px;
+}
+
+body, html {
+    margin: 0;
+}
+
+html {
+    height: 100%;
+    background-color: transparent;
+    /*background-color: rgba(255, 0, 0, 0.2);*/
+}
+
+.resizeHandle {
+    background-image: url(handle.png);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.radio-inline__input {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+}
+
+.radio-inline__label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-right: 18px;
+    border-radius: 3px;
+    transition: all .2s;
+}
+
+.radio-inline__input:checked + .radio-inline__label {
+    background: #B54A4A;
+    color: #fff;
+    text-shadow: 0 0 1px rgba(0,0,0,.7);
+}
+
+.radio-inline__input:focus + .radio-inline__label {
+    outline-color: #4D90FE;
+    outline-offset: -2px;
+    outline-style: auto;
+    outline-width: 5px;
+}
+
+.ddHeader {
+    background-color: blue;
+    color: white;
+    font-size: 20px;
+    padding: 3px;
+}
+
+.ddHeader.passageok {
+    background: rgba(255, 0, 0, 1.0);
+}
+
+#canvasWrapper {
+    width: 100%;
+}
+
+#canvas {
+    background-color: transparent;
+}
+
+#ddFooter {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 5px;
+    font: 40px monospace;
+}
+
+pre, #traplist, .debug {
+    word-break: break-all;
+    white-space: pre-wrap;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px;
+    font: 14px monospace;
+}
+th,td {
+    color: #fff;
+}
