@@ -25,18 +25,41 @@ function debug(e) {
             }
             return 0;
         }
-        let posX = 0;
-        let posy = 0;
-        if (e.self) {
-            posx = e.self.PosX;
-            posy = e.self.PosY;
-        }
-        let list = e.traps.filter(t=>{return t.PosX != 0}).sort((a,b) => distance(a, b, e.self));
-        list = list.concat(e.treasuresBronze.filter(t=>{return t.BNpcID == 2007543}).sort((a,b) => distance(a, b, e.self)));
-        let html = '<table border="1"><tr><th>ID</th><th>PosX</th><th>PosY</th><th>Name</th><th>TargetID</th><th>BNpcNameID</th><th>CastBuffID</th></tr>';
+        let list = [];//e.traps.filter(t=>{return t.PosX != 0}).sort((a,b) => distance(a, b, e.self));
+        list = e.treasures.sort((a,b) => distance(a, b, e.self));
+        //list = list.concat(e.treasures.filter(t=>{return t.BNpcID == 2007543}).sort((a,b) => distance(a, b, e.self)));
+        let html = '<table border="1"><tr><th>ID</th><th>PosX</th><th>PosY</th><th>Name</th><th>Type</th><th>TargetID</th><th>BNpcID</th><th>BNpcNameID</th><th>CastBuffID</th><th>Comment</th></tr>';
         list.forEach(t=>{
             html += `<tr><td>${t.ID}</td><td>${Math.floor(t.PosX*100)/100}</td><td>${Math.floor(t.PosY*100)/100}</td>
-                <td>${t.Name}</td><td>${t.TargetID}</td><td>${t.BNpcNameID}</td><td>${t.CastBuffID}</td>
+                <td>${t.Name}</td><td>${t.type}</td><td>${t.TargetID}</td><td>${t.BNpcID}</td><td>${t.BNpcNameID}</td><td>${t.CastBuffID}</td>
+                <td>${t.BNpcID == 2007358 ? '金箱' : t.BNpcID == 2007357 ? '銀箱' : 'それ他'}</td>
+            </tr>`
+        });
+        html += '</table>'
+        debugDIV.innerHTML = html;
+    }
+
+}
+
+function debug2(e) {
+    var debugDIV = document.querySelector('#debug2');
+    if (debugDIV) {
+        function distance(a, b, self) {
+            if (self) {
+                let dA = Math.abs(a.PosX-self.PosX)+Math.abs(a.PosY-self.PosY);
+                let dB = Math.abs(b.PosX-self.PosX)+Math.abs(b.PosY-self.PosY);
+                return dA - dB;
+            }
+            return 0;
+        }
+        let list = [];//e.traps.filter(t=>{return t.PosX != 0}).sort((a,b) => distance(a, b, e.self));
+        list = e.others.sort((a,b) => distance(a, b, e.self));
+        //list = list.concat(e.treasures.filter(t=>{return t.BNpcID == 2007543}).sort((a,b) => distance(a, b, e.self)));
+        let html = '<table border="1"><tr><th>ID</th><th>PosX</th><th>PosY</th><th>Name</th><th>Type</th><th>TargetID</th><th>BNpcID</th><th>BNpcNameID</th><th>CastBuffID</th></tr>';
+        list.forEach(t=>{
+            html += `<tr><td>${t.ID}</td><td>${Math.floor(t.PosX*100)/100}</td><td>${Math.floor(t.PosY*100)/100}</td>
+                <td>${t.Name}</td><td>${t.type}</td><td>${t.TargetID}</td><td>${t.BNpcID}</td><td>${t.BNpcNameID}</td><td>${t.CastBuffID}</td>
+                <td></td>
             </tr>`
         });
         html += '</table>'
@@ -69,14 +92,15 @@ const app = new Vue({
             }
         });
         addOverlayListener("onAddonExampleEmbeddedTimerFiredEvent", (e) => {
+            this.ddManager.draw(e);
+//            let newPosX = Math.floor((e.self.PosX + 1075)/5) / 10.0;
+//            let newPosY = Math.floor((e.self.PosY + 1075)/5) / 10.0;
             debug(e);
+            debug2(e);
             let encounter = document.querySelector("#encounter");
             if (encounter) {
                 encounter.innerText = JSON.stringify(e.others, null, 4);
             }
-            this.ddManager.draw(e);
-//            let newPosX = Math.floor((e.self.PosX + 1075)/5) / 10.0;
-//            let newPosY = Math.floor((e.self.PosY + 1075)/5) / 10.0;
         });
         
         addOverlayListener("ChangeZone", (e) => {
@@ -114,7 +138,7 @@ const app = new Vue({
     },
     computed: {
         selfPos() {
-            return `(X: ${Math.floor(this.ddManager.self.PosX)}, Y: ${Math.floor(this.ddManager.self.PosY)})`
+            return `(X:${Math.floor(this.ddManager.self.PosX)}, Y:${Math.floor(this.ddManager.self.PosY)})`
         }
     }
   })

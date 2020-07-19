@@ -193,6 +193,22 @@ class DDManager {
             ctx.restore();
         }
 
+        e.treasures.forEach(t => {
+            ctx.save();
+            ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
+            if (t.BNpcID == 2007358) { //Gold
+                ctx.drawImage(imgTresureGold, -5, -5, 10, 10);
+            }
+            else if (t.BNpcID == 2007357) { //Silver
+                ctx.drawImage(imgTresureSilver, -5, -5, 10, 10);
+            }
+            else { //Bronze or Accursed (Bronze == 2006020(mimic))
+                ctx.drawImage(imgTresureBronze, -5, -5, 10, 10);
+            }
+            ctx.restore();
+        });
+/*
         e.treasuresGold.forEach(m => {
             ctx.save();
             ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
@@ -216,7 +232,7 @@ class DDManager {
             ctx.drawImage(imgTresureBronze, -5, -5, 10, 10);
             ctx.restore();
         });
-
+*/
         if (e.cairnOfPassage) {
             ctx.save();
             ctx.translate(e.cairnOfPassage.PosX-this.self.PosX, e.cairnOfPassage.PosY-this.self.PosY);

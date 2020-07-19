@@ -43,7 +43,7 @@ html {
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
     padding: 5px;
-    font: 40px monospace;
+    font: 24px monospace;
 }
 
 pre, #traplist, .debug {
