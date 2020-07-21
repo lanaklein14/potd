@@ -71,9 +71,7 @@ class DDManager {
         }
 
         var poss = e.mobs.map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
-        poss = poss.concat(e.treasuresGold.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
-        poss = poss.concat(e.treasuresSilver.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
-        poss = poss.concat(e.treasuresBronze.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
+        poss = poss.concat(e.treasures.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
         if (e.self) {
             poss.push({PosX:e.self.PosX, PosY:e.self.PosY});
         }
