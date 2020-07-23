@@ -5,11 +5,17 @@ var imgCairnOfReturn = new Image();
 var imgTresureGold = new Image();
 var imgTresureSilver = new Image();
 var imgTresureBronze = new Image();
-imgCairnOfPassage.src = 'https://raw.githubusercontent.com/lanaklein14/lanaklein14.github.io/master/images/cairnOfPassage.png';
-imgCairnOfReturn.src = 'https://raw.githubusercontent.com/lanaklein14/lanaklein14.github.io/master/images/cairnOfReturn.png';
-imgTresureGold.src = 'https://raw.githubusercontent.com/lanaklein14/lanaklein14.github.io/master/images/treasureGold.png';
-imgTresureSilver.src = 'https://raw.githubusercontent.com/lanaklein14/lanaklein14.github.io/master/images/treasureSilver.png';
-imgTresureBronze.src = 'https://raw.githubusercontent.com/lanaklein14/lanaklein14.github.io/master/images/treasureBronze.png';
+var imgAccursedHoard = new Image();
+var imgExit = new Image();
+var imgStairs = new Image();
+imgCairnOfPassage.src = './images/cairnOfPassage.png';
+imgCairnOfReturn.src = './images/cairnOfReturn.png';
+imgTresureGold.src = './images/GoldCoffer.png';
+imgTresureSilver.src = './images/SilverCoffer.png';
+imgTresureBronze.src = './images/BronzeCoffer.png';
+imgAccursedHoard.src = './images/AccursedHoard.png';
+imgExit.src = './images/Exit.png';
+imgStairs.src = './images/Stairs.png';
 // CombatData イベントを購読
 
 

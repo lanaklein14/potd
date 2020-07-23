@@ -1,4 +1,19 @@
-﻿
+﻿var imgCairnOfPassage = new Image();
+var imgCairnOfReturn = new Image();
+var imgExit = new Image();
+var imgStairs = new Image();
+var imgAccursedHoard = new Image();
+var imgGoldCoffer = new Image();
+var imgSilverCoffer = new Image();
+var imgBronzeCoffer = new Image();
+imgCairnOfPassage.src = './images/cairnOfPassage.png';
+imgCairnOfReturn.src = './images/cairnOfReturn.png';
+imgExit.src = './images/Exit.png';
+imgStairs.src = './images/Stairs.png';
+imgAccursedHoard.src = './images/AccursedHoard.png';
+imgGoldCoffer.src = './images/GoldCoffer.png';
+imgSilverCoffer.src = './images/SilverCoffer.png';
+imgBronzeCoffer.src = './images/BronzeCoffer.png';
 
 class DDManager {
     constructor() {
@@ -14,6 +29,34 @@ class DDManager {
         this.layout = null;
         this.scale = 2.0;
         this.self = {PosX:0, PosY:0, Heading:0};
+    }
+
+    static getImage(combatant) {
+        if(combatant.BNpcID == 2007188) {
+            return imgCairnOfPassage;
+        }
+        else if (combatant.BNpcID == 2007187) {
+            return imgCairnOfReturn;
+        }
+        else if (combatant.BNpcID == 2005809 || combatant.BNpcID == 2006016) {
+            return imgExit;
+        }
+        else if (combatant.BNpcID == 2006012) {
+            return imgStairs;
+        }
+        else if (combatant.BNpcID == 2007543) {
+            return imgAccursedHoard;
+        }
+        else if (combatant.BNpcID == 2007358) {
+            return imgGoldCoffer;
+        }
+        else if (combatant.BNpcID == 2007357) {
+            return imgSilverCoffer;
+        }
+        else if (combatant.Name == '宝箱') {
+            return imgBronzeCoffer;
+        }
+        return null;
     }
 
     get header() {
@@ -69,9 +112,12 @@ class DDManager {
         if (!canvas.getContext) {
             return;   
         }
-
+/*
         var poss = e.mobs.map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
         poss = poss.concat(e.treasures.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
+        //poss = poss.concat(e.treasuresGold.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
+        //poss = poss.concat(e.treasuresSilver.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
+        //poss = poss.concat(e.treasuresBronze.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
         if (e.self) {
             poss.push({PosX:e.self.PosX, PosY:e.self.PosY});
         }
@@ -80,7 +126,9 @@ class DDManager {
         }
         if (e.cairnOfReturn) {
             poss.push({PosX:e.cairnOfReturn.PosX, PosY:e.cairnOfReturn.PosY});
-        }
+        }*/
+        var poss = e.all.filter(c => c.Name != null).map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
+
         this.rooms.forEach(r=>r.activate(poss));
 
         var ctx = canvas.getContext('2d');
@@ -182,7 +230,7 @@ class DDManager {
             ctx.closePath();
             ctx.restore();
         });
-
+/*
         if (e.cairnOfReturn) {
             ctx.save();
             ctx.translate(e.cairnOfReturn.PosX-this.self.PosX, e.cairnOfReturn.PosY-this.self.PosY);
@@ -190,21 +238,42 @@ class DDManager {
             ctx.drawImage(imgCairnOfReturn, -5, -5, 10, 10);
             ctx.restore();
         }
+*/
+        const treasures = e.all.filter(c=> 
+//            (c.type == 7 && c.BNpcID == 2007358) || //Gold Coffer
+//            (c.type == 7 && c.BNpcID == 2007357) || //Silver Coffer
+//            (c.type == 4 && c.BNpcID == 782) || //Bronze Coffer
+//            (c.type == 7 && c.BNpcID == 2007543) || //Accursed Hoarded
+            (c.Name == "宝箱") || //not treasures //宝箱
+            (c.Name == "埋もれた財宝") //not treasures //埋もれた財宝
+        );
+        treasures.forEach(t => {
+            const img = DDManager.getImage(t);
+            if (img) {
+                ctx.save();
+                ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
+                ctx.drawImage(img, -5, -5, 10, 10);
+                ctx.restore();
+            }
+        });
 
-        e.treasures.forEach(t => {
-            ctx.save();
-            ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            if (t.BNpcID == 2007358) { //Gold
-                ctx.drawImage(imgTresureGold, -5, -5, 10, 10);
+        const locations = e.all.filter(c=> 
+            (c.type == 7 && c.BNpcID == 2007188) || //Cairn Of Passage
+            (c.type == 7 && c.BNpcID == 2007187) || //Cairn Of Return
+            (c.type == 7 && c.BNpcID == 2005809) || //Exit1
+            (c.type == 7 && c.BNpcID == 2006016) || //Exit2
+            (c.type == 7 && c.BNpcID == 2006012) //Stairs
+        );
+        locations.forEach(t => {
+            const img = DDManager.getImage(t);
+            if (img) {
+                ctx.save();
+                ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
+                ctx.drawImage(img, -5, -5, 10, 10);
+                ctx.restore();
             }
-            else if (t.BNpcID == 2007357) { //Silver
-                ctx.drawImage(imgTresureSilver, -5, -5, 10, 10);
-            }
-            else { //Bronze or Accursed (Bronze == 2006020(mimic))
-                ctx.drawImage(imgTresureBronze, -5, -5, 10, 10);
-            }
-            ctx.restore();
         });
 /*
         e.treasuresGold.forEach(m => {
@@ -231,6 +300,24 @@ class DDManager {
             ctx.restore();
         });
 */
+/*
+        // Position系
+        e.all.filter(c => c.BNpcID == 2005809 || c.BNpcID == 2006016).forEach(t => {
+            ctx.save();
+            ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
+            ctx.drawImage(imgExit, -5, -5, 10, 10);
+            ctx.restore();
+        });
+
+        e.all.filter(c => c.BNpcID == 2006012).forEach(t => {
+            ctx.save();
+            ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
+            ctx.drawImage(imgStairs, -5, -5, 10, 10);
+            ctx.restore();
+        });
+
         if (e.cairnOfPassage) {
             ctx.save();
             ctx.translate(e.cairnOfPassage.PosX-this.self.PosX, e.cairnOfPassage.PosY-this.self.PosY);
@@ -238,6 +325,7 @@ class DDManager {
             ctx.drawImage(imgCairnOfPassage, -5, -5, 10, 10);
             ctx.restore();
         }
+  */
         ctx.restore();
 
     }
