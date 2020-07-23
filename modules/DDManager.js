@@ -6,8 +6,8 @@ var imgAccursedHoard = new Image();
 var imgGoldCoffer = new Image();
 var imgSilverCoffer = new Image();
 var imgBronzeCoffer = new Image();
-imgCairnOfPassage.src = './images/cairnOfPassage.png';
-imgCairnOfReturn.src = './images/cairnOfReturn.png';
+imgCairnOfPassage.src = './images/CairnOfPassage.png';
+imgCairnOfReturn.src = './images/CairnOfReturn.png';
 imgExit.src = './images/Exit.png';
 imgStairs.src = './images/Stairs.png';
 imgAccursedHoard.src = './images/AccursedHoard.png';
@@ -147,7 +147,7 @@ class DDManager {
             else {
                 this.currentRoom = '';
             }
-        }
+        }https://lanaklein14.github.io/potd/dd.htm
 
         ctx.save();
         ctx.translate(canvas.width/2, canvas.height/2);
