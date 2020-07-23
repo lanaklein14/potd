@@ -29,6 +29,7 @@ class DDManager {
         this.layout = null;
         this.scale = 2.0;
         this.self = {PosX:0, PosY:0, Heading:0};
+        this.currentRoom = '';
     }
 
     static getImage(combatant) {
@@ -138,6 +139,15 @@ class DDManager {
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
         this.self = e.self ? e.self : {PosX:0, PosY:0, Heading:0};
+        if (e.self) {
+            const currentRoom = this.rooms.find(r => r.containsPos(e.self));
+            if (currentRoom) {
+                this.currentRoom = currentRoom.name;
+            }
+            else {
+                this.currentRoom = '';
+            }
+        }
 
         ctx.save();
         ctx.translate(canvas.width/2, canvas.height/2);

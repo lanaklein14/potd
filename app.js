@@ -1,24 +1,5 @@
 ﻿
 
-var imgCairnOfPassage = new Image();
-var imgCairnOfReturn = new Image();
-var imgTresureGold = new Image();
-var imgTresureSilver = new Image();
-var imgTresureBronze = new Image();
-var imgAccursedHoard = new Image();
-var imgExit = new Image();
-var imgStairs = new Image();
-imgCairnOfPassage.src = './images/cairnOfPassage.png';
-imgCairnOfReturn.src = './images/cairnOfReturn.png';
-imgTresureGold.src = './images/GoldCoffer.png';
-imgTresureSilver.src = './images/SilverCoffer.png';
-imgTresureBronze.src = './images/BronzeCoffer.png';
-imgAccursedHoard.src = './images/AccursedHoard.png';
-imgExit.src = './images/Exit.png';
-imgStairs.src = './images/Stairs.png';
-// CombatData イベントを購読
-
-
 
 function debug(e) {
     var debugDIV = document.querySelector('#debug');
@@ -144,7 +125,7 @@ const app = new Vue({
     },
     computed: {
         selfPos() {
-            return `(X:${Math.floor(this.ddManager.self.PosX)}, Y:${Math.floor(this.ddManager.self.PosY)})`
+            return `${this.ddManager.currentRoom}(X:${Math.floor(this.ddManager.self.PosX)}, Y:${Math.floor(this.ddManager.self.PosY)})`
         }
     }
   })
