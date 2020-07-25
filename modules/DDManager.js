@@ -33,7 +33,6 @@ class Floor {
 
         this.treasureMap = {};
         this.trapMap = {};
-        this.locationMap = {};
     }
     update(combatants, webhook=false) {
         const self = combatants.length > 0 ? combatants[0] : {PosX:0, PosY:0, Heading:0};
@@ -91,8 +90,7 @@ class Floor {
             (c.type == 7 && c.BNpcID == 2006016) || //Exit2
             (c.type == 7 && c.BNpcID == 2006012) //Stairs
         );
-        this.locations.forEach(l => this.locationMap[l.ID] = l);
-        Object.values(this.treasureMap).forEach(t => t.distance = Math.abs(t.PosX-self.PosX) + Math.abs(t.PosY-self.PosY));
+        this.locations.forEach(t => t.distance = Math.abs(t.PosX-self.PosX) + Math.abs(t.PosY-self.PosY));
 
         //trap 7   2007184
 
@@ -396,11 +394,7 @@ class DDManager {
             ctx.restore();
         });
         
-        for (const prop in this.currentFloor.treasureMap) {
-            const t = this.currentFloor.treasureMap[prop];
-            if (t.opened) {
-                continue;
-            }
+        Object.values(this.currentFloor.treasureMap).filter(t => !t.opened).forEach(t => {
             const img = DDManager.getImage(t);
             if (img) {
                 ctx.save();
@@ -409,10 +403,9 @@ class DDManager {
                 ctx.drawImage(img, -5, -5, 10, 10);
                 ctx.restore();
             }
-        };
+        });
 
-        for (const prop in this.currentFloor.locationMap) {
-            const t = this.currentFloor.locationMap[prop];
+        this.currentFloor.locations.forEach(t => {
             const img = DDManager.getImage(t);
             if (img) {
                 ctx.save();
@@ -421,7 +414,7 @@ class DDManager {
                 ctx.drawImage(img, -5, -5, 10, 10);
                 ctx.restore();
             }
-        };
+        });
         ctx.restore();
     }
 
@@ -458,7 +451,7 @@ class DDManager {
                 }
                 else if (result5) {
                     console.log(e);
-                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).filter(t => !t.opened).reduce((a, b) => a.distance < b.distance ? a : b);
                     nearestTreasure.item = result5[1];
                 }
                 else {
@@ -466,7 +459,7 @@ class DDManager {
                         const result = new RegExp(msg).exec(e.line[4]);
                         if (result) {
                             console.log(e);
-                            const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                            const nearestTreasure = Object.values(this.currentFloor.treasureMap).filter(t => !t.opened).reduce((a, b) => a.distance < b.distance ? a : b);
                             nearestTreasure.opened = true;
                             nearestTreasure.item = result[1];
                             break;
@@ -478,10 +471,13 @@ class DDManager {
                 var result1 = new RegExp('(.+)を所持しているため、').exec(e.line[4]);
                 if (result1) {
                     console.log(e);
-                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
-                    if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
-                        nearestTreasure.opened = true;
-                        nearestTreasure.item = result1[1];
+                    const unopened4 = Object.values(this.currentFloor.treasureMap).filter(t => t.type == 4 && !t.opened);
+                    if (unopened4.length > 0) {
+                        const nearestTreasure = unopened4.reduce((a, b) => a.distance < b.distance ? a : b);
+                        if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
+                            nearestTreasure.opened = true;
+                            nearestTreasure.item = result1[1];
+                        }                        
                     }
                 }
             }
@@ -489,8 +485,9 @@ class DDManager {
                 var result1 = new RegExp('は(.+)を手に入れた。').exec(e.line[4]);
                 if (result1) {
                     console.log(e);
-                    if (Object.values(this.currentFloor.treasureMap).length > 0) {
-                        const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                    const unopened4 = Object.values(this.currentFloor.treasureMap).filter(t => t.type == 4 && !t.opened);
+                    if (unopened4.length > 0) {
+                        const nearestTreasure = unopened4.reduce((a, b) => a.distance < b.distance ? a : b);
                         if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
                             nearestTreasure.opened = true;
                             nearestTreasure.item = result1[1];
