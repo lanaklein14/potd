@@ -20,9 +20,10 @@ imgBronzeCoffer.src = './images/BronzeCoffer.png';
 
 // 
 class Floor {
-    constructor(zone, floorNumber) {
+    constructor(zone, floorNumber, changing=false) {
         this.zone = zone;
         this.floorNumber = floorNumber;
+        this.changing = changing;
         this.countKill = 0;
         this.passageOk = false;
         this.mobs = [];
@@ -35,6 +36,9 @@ class Floor {
         this.trapMap = {};
     }
     update(combatants, webhook=false) {
+        if (this.changing) {
+            return;
+        }
         const self = combatants.length > 0 ? combatants[0] : {PosX:0, PosY:0, Heading:0};
         //ActiveRoomsの更新
         var poss = combatants.filter(c => c.Name != null).map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
@@ -256,7 +260,7 @@ class DDManager {
 
     floorChanging() {
         const tmp = this.currentFloor.floorNumber + 1;
-        this.currentFloor = new Floor(this.currentZone, tmp);
+        this.currentFloor = new Floor(this.currentZone, tmp, true);
     }
 
     floorChanged(floorNumber) {
