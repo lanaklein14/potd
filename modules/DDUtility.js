@@ -463,6 +463,7 @@ class Zone {
 }
 
 class DDUtility {
+    // モブ名⇒ID https://xivapi.com/search?indexes=BnpcName&string_column=Name_ja&string_algo=term&columns=ID,Name_ja&string=%E3%83%87%E3%82%A3%E3%83%BC%E3%83%97%E3%83%91%E3%83%AC%E3%82%B9%E3%83%BB%E3%82%AD%E3%83%BC%E3%83%91%E3%83%BC
     static getZone(zoneID) {
         const zoneMap = {
             561: new Zone(561, 1, layout01_50_101_150, [ //B1 - B10
@@ -487,7 +488,7 @@ class DDUtility {
             ]),
             565: new Zone(565, 41, layout01_50_101_150, [ //B41 - B50
                 5035, //パレス・マンティコア
-                5354, //パレス・レイス
+                5036, //ナイトメア・レイス  5354パレス・レイス
                 5355, //パレス・グレイブキーパー
             ]),
             593: new Zone(593, 51, layout51_80_151_180, [ //B51 - B60

@@ -485,7 +485,6 @@ class DDManager {
     }
 
     isDangerMob(bnpcNameID) {
-        // モブ名⇒ID https://xivapi.com/search?indexes=BnpcName&string_column=Name_ja&string_algo=term&columns=ID,Name_ja&string=%E3%83%87%E3%82%A3%E3%83%BC%E3%83%97%E3%83%91%E3%83%AC%E3%82%B9%E3%83%BB%E3%82%AD%E3%83%BC%E3%83%91%E3%83%BC
         return this.currentZone.patrolMobNameIDMap.includes(bnpcNameID);
     }
     isMimic(bnpcNameID) {
