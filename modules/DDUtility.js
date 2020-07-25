@@ -198,6 +198,7 @@ layout01_50_101_150.addAccursedHoard(187.12, -299.06);
 layout01_50_101_150.addAccursedHoard(371.41, -296.06);
 layout01_50_101_150.addAccursedHoard(262.02, -336.51);
 layout01_50_101_150.addAccursedHoard(432, -308.33);
+layout01_50_101_150.addAccursedHoard(234.53, -248.69);
 layout01_50_101_150.addAccursedHoard(250.25, -248.37);
 layout01_50_101_150.addAccursedHoard(250.55, -233.44);
 layout01_50_101_150.addAccursedHoard(300.26, -242.39);
@@ -427,102 +428,145 @@ layout81_100_181_200.addPassage('C1', 'C2');
 layout81_100_181_200.addPassage('D1', 'D2');
 
 const layoutExit = new Layout([
-    new Room('Exit B1-B10', -123, 81, -78, 118),
-    new Room('Exit B51-B60', -215, -216, -185, -185),
-    new Room('Exit B61-B70', -215, -116, -185, -85),
-    new Room('Exit B71-B80', -215, -16, -185, 15),
-    new Room('Exit B81-B90', -315, -16, -283, 15)
+    new Room('Exit B10', -123, 81, -78, 118),
+    new Room('Exit B60', -215, -216, -185, -185),
+    new Room('Exit B70', -215, -116, -185, -85),
+    new Room('Exit B80', -215, -16, -185, 15),
+    new Room('Exit B90', -315, -16, -283, 15)
 ]);
 
+class Zone {
+    constructor(id, baseFloorNumber, layout, patrolMobNameIDMap) {
+        this.id = id;
+        this.baseFloorNumber = baseFloorNumber
+        this.layout = layout;
+        this.patrolMobNameIDMap = patrolMobNameIDMap;
+    }
+    get inDD() {
+        return this.baseFloorNumber >= 0;
+    }
+    get title() {
+        if (!this.inDD) {
+            return `死者の宮殿の外(Zone:${this.id})`;
+        }
+        let header = '死者の宮殿'
+        if (this.baseFloorNumber>0) {
+            header += ` B${this.baseFloorNumber}-B${this.baseFloorNumber+9}`;
+        }
+        return header;        
+    }
+
+    getCurrentRoomName(self) {
+        const currentRoom = this.layout.rooms.find(r => r.containsPos(self));
+        return currentRoom ? currentRoom.name : '';
+    }
+}
 
 class DDUtility {
-    static zoneData(zoneID) {
+    static getZone(zoneID) {
         const zoneMap = {
-            561: {
-                baseFloor: 1,
-                layout: layout01_50_101_150
-            },
-            562: {
-                baseFloor: 11,
-                layout: layout01_50_101_150
-            },
-            563: {
-                baseFloor: 21,
-                layout: layout01_50_101_150
-            },
-            564: {
-                baseFloor: 31,
-                layout: layout01_50_101_150
-            },
-            565: {
-                baseFloor: 41,
-                layout: layout01_50_101_150
-            },
-            593: {
-                baseFloor: 51,
-                layout: layout51_80_151_180
-            },
-            594: {
-                baseFloor: 61,
-                layout: layout51_80_151_180
-            },
-            595: {
-                baseFloor: 71,
-                layout: layout51_80_151_180
-            },
-            596: {
-                baseFloor: 81,
-                layout: layout81_100_181_200
-            },
-            597: {
-                baseFloor: 91,
-                layout: layout81_100_181_200
-            },
-            598: {
-                baseFloor: 101,
-                layout: layout01_50_101_150
-            },
-            599: {
-                baseFloor: 111,
-                layout: layout01_50_101_150
-            },
-            600: {
-                baseFloor: 121,
-                layout: layout01_50_101_150
-            },
-            601: {
-                baseFloor: 131,
-                layout: layout01_50_101_150
-            },
-            602: {
-                baseFloor: 141,
-                layout: layout01_50_101_150
-            },
-            603: {
-                baseFloor: 151,
-                layout: layout51_80_151_180
-            },
-            604: {
-                baseFloor: 161,
-                layout: layout51_80_151_180
-            },
-            605: {
-                baseFloor: 171,
-                layout: layout51_80_151_180
-            },
-            606: {
-                baseFloor: 181,
-                layout: layout81_100_181_200
-            },
-            607: {
-                baseFloor: 191,
-                layout: layout81_100_181_200
-            },
-            570: {
-                baseFloor: 0,
-                layout: layoutExit
-            }
+            561: new Zone(561, 1, layout01_50_101_150, [ //B1 - B10
+                4983, //パレス・ジズ
+                4984, //ロストゴブリン
+                4985, //パレス・ダングビートル
+            ]), 
+            562: new Zone(562, 11, layout01_50_101_150, [ //B11 - B20
+                4996, //パレス・プリン
+                4997, //パレス・コブラ
+                4998, //パレス・ビロコ
+            ]),
+            563: new Zone(563, 21, layout01_50_101_150, [ //B21 - B30
+                5009, //パレス・デュラハン
+                5010, //パレス・ミノタウロス
+                5011, //パレス・スカネテ
+            ]),
+            564: new Zone(564, 31, layout01_50_101_150, [ //B31 - B40
+                5022, //ナイトメア・サキュバス
+                5023, //ナイトメア・カトブレパス
+                5024, //パレス・グルマン
+            ]),
+            565: new Zone(565, 41, layout01_50_101_150, [ //B41 - B50
+                5035, //パレス・マンティコア
+                5354, //パレス・レイス
+                5355, //パレス・グレイブキーパー
+            ]),
+            593: new Zone(593, 51, layout51_80_151_180, [ //B51 - B60
+                5302, //パレス・アヌビス
+                5307, //パレス・マナアイドル
+                5305, //パレス・アークデーモン
+            ]),
+            594: new Zone(594, 61, layout51_80_151_180, [ //B61 - B70
+                5317, //パレス・エルブスト
+                5319, //パレス・ブレードビネガロン
+                5316, //パレス・ミロドン
+            ]),
+            595: new Zone(595, 71, layout51_80_151_180, [ //B71 - B80
+                5331, //パレス・アンズー
+                5325, //パレス・サイクロプス
+                5324, //バード・オブ・パレス
+            ]),
+            596: new Zone(596, 81, layout81_100_181_200, [ //B81 - B90
+                5343, //パレス・ワモーラ
+                5342, //パレス・ハパリット
+                5344, //パレス・キマイラ
+            ]),
+            597: new Zone(597, 91, layout81_100_181_200, [ //B91 - B100
+                5354, //パレス・レイス
+                5353, //パレス・アイアンコース
+                5355, //パレス・グレイブキーパー
+            ]),
+            598: new Zone(598, 101, layout01_50_101_150, [ //B101 - B110
+                5368, //ディープパレス・ジズ
+                5369, //ゴブリン・アドベンチャラー
+                5370, //ディープパレス・ダングビートル
+            ]),
+            599: new Zone(599, 111, layout01_50_101_150, [ //B111 - B120
+                5374, //ディープパレス・ギガントード
+                5382, //ディープパレス・コブラ
+                5383, //ディープパレス・ビロコ
+            ]),
+            600: new Zone(600, 121, layout01_50_101_150, [ //B121 - B130
+                5394, //ディープパレス・デュラハン
+                5395, //ディープパレス・ミノタウルス
+                5396, //ディープパレス・スカネテ
+            ]),
+            601: new Zone(601, 131, layout01_50_101_150, [ //B131 - B140
+                5409, //ディープパレス・グルマン
+                5402, //ディープパレス・アーリマン
+                5408, //ディープパレス・カトブレパス
+            ]),
+            602: new Zone(602, 141, layout01_50_101_150, [ //B141 - B150
+                5421, //ディープパレス・マンティコア
+                5422, //ディープパレス・レイス
+                5423, //ディープパレス・キーパー
+            ]),
+            603: new Zone(603, 151, layout51_80_151_180, [ //B151 - B160
+                5432, //ディープパレス・シュワブチ
+                5436, //ディープパレス・マロリス
+                5434, //ディープパレス・アークデーモン
+            ]),
+            604: new Zone(604, 161, layout51_80_151_180, [ //B161 - B170
+                5445, //ディープパレス・トゥルスス
+                5447, //ディープパレス・ビネガロン
+                5448, //ディープパレス・プテラノドン
+            ]),
+            605: new Zone(605, 171, layout51_80_151_180, [ //B171 - B180
+                5453, //ディープパレス・スノウクロプス
+                5451, //ディープパレス・ウィセント
+                5452, //バード・オブ・ディープパレス
+            ]),
+            606: new Zone(606, 181, layout81_100_181_200, [ //B181 - B190
+                5469, //ディープパレス・ワモーラ
+                5470, //ディープパレス・ガルム
+                5468, //ディープパレス・ヴィンドスルス
+            ]),
+            607: new Zone(607, 191, layout81_100_181_200, [ //B191 - B200
+                5475, //ディープパレス・アイアンコース
+                5473, //ディープパレス・ファハン
+                5423, //ディープパレス・キーパー
+            ]),
+            570: new Zone(570, 0, layoutExit, []) //B191 - B200
         };
-        return zoneMap[zoneID];
+        return zoneMap[zoneID] ? zoneMap[zoneID] : new Zone(zoneID, -1, new Layout([]), []);
     }
 }

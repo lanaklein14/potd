@@ -10,8 +10,10 @@
             ((this.roomA.top+this.roomA.bottom)/2 + (this.roomB.top+this.roomB.bottom)/2)/2:
             (this.roomA.bottom+this.roomB.top)/2;
     }
-    draw(ctx, origin) {
-        if (this.roomA.isActive && this.roomB.isActive) {
+    draw(ctx, origin, activeRoomNames=null) {
+        if (activeRoomNames == null || 
+            (activeRoomNames.has(this.roomA.name) && activeRoomNames.has(this.roomB.name))) {
+        //if (this.roomA.isActive && this.roomB.isActive) {
             ctx.beginPath();
             ctx.strokeStyle = "rgba(200, 200, 150, 0.20)";
             ctx.lineWidth = 10;

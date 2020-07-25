@@ -34,8 +34,8 @@
         }
     }
 
-    draw(ctx, origin, scale) {
-        if (this.isActive) {
+    draw(ctx, origin, scale, activeRoomNames=null) {
+        if (activeRoomNames == null || activeRoomNames.has(this.name)) {
             ctx.save();
             ctx.translate(-origin.PosX, -origin.PosY);
             ctx.fillStyle = this.needVerify ? "rgba(200, 200, 0, 0.30)" : "rgba(200, 200, 150, 0.30)";

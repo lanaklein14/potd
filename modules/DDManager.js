@@ -15,21 +15,168 @@ imgGoldCoffer.src = './images/GoldCoffer.png';
 imgSilverCoffer.src = './images/SilverCoffer.png';
 imgBronzeCoffer.src = './images/BronzeCoffer.png';
 
-class DDManager {
-    constructor() {
-        this.inDD = false;
-        this.baseFloor = 0;
-        this.floor = 0;
+
+
+
+// 
+class Floor {
+    constructor(zone, floorNumber) {
+        this.zone = zone;
+        this.floorNumber = floorNumber;
         this.countKill = 0;
         this.passageOk = false;
-        this.zoneID = 0;
-        this.rooms = []
-        this.passages = []
-        this.trapPredictions = [];
-        this.layout = null;
-        this.scale = 2.0;
+        this.mobs = [];
+        this.treasures = [];
+        this.traps = [];
+        this.locations = [];
+        this.activeRoomNames = new Set();
+
+        this.treasureMap = {};
+        this.trapMap = {};
+        this.locationMap = {};
+    }
+    update(combatants, webhook=false) {
+        const self = combatants.length > 0 ? combatants[0] : {PosX:0, PosY:0, Heading:0};
+        //ActiveRoomsの更新
+        var poss = combatants.filter(c => c.Name != null).map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
+        this.zone.layout.rooms.filter(r => poss.some(p=>r.containsPos(p))).forEach(r => this.activeRoomNames.add(r.name));
+        //Mobsの更新
+        this.mobs = combatants.filter(c => c.type == 2 && c.BNpcID != 6388 && c.OwnerID == 0);
+        //Treasuresの更新
+        this.treasures = combatants.filter(c => 
+            //            (c.type == 7 && c.BNpcID == 2007358) || //Gold Coffer
+            //            (c.type == 7 && c.BNpcID == 2007357) || //Silver Coffer
+            //            (c.type == 4 && c.BNpcID == 782) || //Bronze Coffer
+            //            (c.type == 7 && c.BNpcID == 2007543) || //Accursed Hoarded
+            (c.Name == "宝箱") || //not treasures //宝箱
+            (c.Name == "埋もれた財宝") //not treasures //埋もれた財宝
+        );
+        this.treasures.forEach(t => {
+            if (!this.treasureMap[t.ID]) {
+                this.treasureMap[t.ID] = t;
+                t.opened = false;
+                if (webhook && t.BNpcID == 2007543) {
+                    this.webhookAccursedHoard(t);
+                }
+            }
+        });
+        Object.values(this.treasureMap).forEach(t => t.distance = Math.abs(t.PosX-self.PosX) + Math.abs(t.PosY-self.PosY));
+
+        //Trapsの更新
+        this.traps = combatants.filter(c => c.type == 2 && c.BNpcID == 6388);
+        this.traps.forEach(t => {
+            if (this.trapMap[t.ID]) {
+                //位置情報(0⇒それ以外)のみ上書き
+                if (this.trapMap[t.ID].PosX == 0 && t.PosX != 0) {
+                    this.trapMap[t.ID].PosX = t.PosX;
+                    this.trapMap[t.ID].PosY = t.PosY;
+                    this.trapMap[t.ID].PosZ = t.PosZ;
+                    if (!this.trapMap[t.ID].treasure && webhook) this.webhookNewTrap(this.trapMap[t.ID]);
+                }                
+            }
+            else {
+                this.trapMap[t.ID] = t;
+                t.trapType = '';
+                if (this.treasureMap[t.ID+1]) {
+                    t.treasure = true;
+                }
+            }
+        });
+
+        //Locationsの更新
+        this.locations = combatants.filter(c => 
+            (c.type == 7 && c.BNpcID == 2007188) || //Cairn Of Passage
+            (c.type == 7 && c.BNpcID == 2007187) || //Cairn Of Return
+            (c.type == 7 && c.BNpcID == 2005809) || //Exit1
+            (c.type == 7 && c.BNpcID == 2006016) || //Exit2
+            (c.type == 7 && c.BNpcID == 2006012) //Stairs
+        );
+        this.locations.forEach(l => this.locationMap[l.ID] = l);
+        Object.values(this.treasureMap).forEach(t => t.distance = Math.abs(t.PosX-self.PosX) + Math.abs(t.PosY-self.PosY));
+
+        //trap 7   2007184
+
+    }
+    treasureList(node) {
+        if (node) {
+            let html = '<h3>宝箱</h3><table border="1"><tr><th>ID</th><th>Type</th><th>PosX</th><th>PosY</th><th>Distance</th><th>Opened</th><th>Item</th><th>Comment</th></tr>';
+            Object.values(this.treasureMap).sort((a, b) => a.distance - b.distance).forEach(t => {
+                html += `<tr><td>${t.ID}</td><td>${t.BNpcID == 2007358 ? '金箱' : 
+                                                   t.BNpcID == 2007357 ? '銀箱' : 
+                                                   t.BNpcID == 2006020 ? '銅箱' : 
+                                                   t.BNpcID == 782 ? '銅箱2' : 
+                                                   t.BNpcID == 2007543 ? '埋もれた財宝' : 'それ他'}</td><td>${Math.floor(t.PosX*100)/100}</td><td>${Math.floor(t.PosY*100)/100}</td>
+                    <td>${Math.floor(t.distance*100)/100}</td><td>${t.opened == true}</td><td>${t.item ? t.item : ''}</td><td>${t.type} - ${t.BNpcID}</td>
+                </tr>`
+            });
+            html += '</table>'
+            node.innerHTML = html;
+        }
+    }
+    trapList(node) {
+        if (node) {
+            let html = '<h3>トラップ</h3><table border="1"><tr><th>ID</th><th>Type</th><th>PosX</th><th>PosY</th><th>Triggered</th></tr>';
+            Object.values(this.trapMap).filter(t => !t.treasure).forEach(t => {
+                html += `<tr><td>${t.ID}</td><td>${t.treasure == true ? '箱' : '床'}</td><td>${Math.floor(t.PosX*100)/100}</td><td>${Math.floor(t.PosY*100)/100}</td>
+                    <td>${t.trapType ? t.trapType : ''}</td>
+                </tr>`
+            });
+            html += '</table>'
+            node.innerHTML = html;
+        }
+    
+    }
+
+    webhookNewTrap(t) {
+        const payload = {
+            content: `トラップ: ${this.zone.title} (${Math.floor(t.PosX*100)/100}, ${Math.floor(t.PosY*100)/100})`
+        }
+        const url = 'https://discordapp.com/api/webhooks/736365365130559578/ZTukrhhL0SQ2rbNkK3gkj1QJS4wiULOov3mwjF8vMTiqqDcw0xrt45Qe6APV2mmwYNnl';
+        fetch(url, {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            //mode: "cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            //credentials: "same-origin", // include, same-origin, *omit
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                // "Content-Type": "application/x-www-form-urlencoded",
+            },
+            //redirect: "follow", // manual, *follow, error
+            //referrer: "no-referrer", // no-referrer, *client
+            body: JSON.stringify(payload), // 本文のデータ型は "Content-Type" ヘッダーと一致する必要があります
+        })
+    }
+
+    webhookAccursedHoard(t) {
+        const payload = {
+            content: `埋もれた財宝: ${this.zone.title} (${Math.floor(t.PosX*100)/100}, ${Math.floor(t.PosY*100)/100})`
+        }
+        const url = 'https://discordapp.com/api/webhooks/736365365130559578/ZTukrhhL0SQ2rbNkK3gkj1QJS4wiULOov3mwjF8vMTiqqDcw0xrt45Qe6APV2mmwYNnl';
+        fetch(url, {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            //mode: "cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            //credentials: "same-origin", // include, same-origin, *omit
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                // "Content-Type": "application/x-www-form-urlencoded",
+            },
+            //redirect: "follow", // manual, *follow, error
+            //referrer: "no-referrer", // no-referrer, *client
+            body: JSON.stringify(payload), // 本文のデータ型は "Content-Type" ヘッダーと一致する必要があります
+        })
+    }
+
+}
+
+class DDManager {
+    constructor(webhook=false) {
+        this.currentZone = DDUtility.getZone(-1);
+        this.currentFloor = new Floor(this.currentZone, -1);
+        this.currentRoomName = '';
+        this._scale = 1.2;
         this.self = {PosX:0, PosY:0, Heading:0};
-        this.currentRoom = '';
+        this.webhook=webhook;
     }
 
     static getImage(combatant) {
@@ -60,77 +207,63 @@ class DDManager {
         return null;
     }
 
+    /**
+     * 現在の拡大率を返す。拡大率はwheelイベントで変化
+     */
+    get scale() {
+        return this._scale;
+    }
+
     get header() {
-        if (!this.inDD) {
-            return `死者の宮殿の外 (Zone:${this.zoneID})`;
-        }
-        let header = '死者の宮殿'
-        if (this.baseFloor>0) {
-            header += ` B${this.baseFloor}-B${this.baseFloor+9}`;
-        }
-        if (this.floor>0) {
-            header += `(B${this.floor}:${this.countKill}${this.passageOk?' - 転移OK':''})`;
+        let header = this.currentZone.title;
+        if (this.currentFloor.floorNumber > 0) {
+            header += `(B${this.currentFloor.floorNumber}:${this.currentFloor.countKill}${this.currentFloor.passageOk?'転移OK':''})`;
         }
         return header;
     }
 
+    get selfPos() {
+        return `${this.currentRoomName}(X:${Math.floor(this.self.PosX)},Y:${Math.floor(this.self.PosY)})`
+    }
+
     floorChanging() {
-        this.floor+=1;
-        this.countKill = 0;
-        this.passageOk = false;
-        this.rooms.forEach(r => {r.isActive = false});
+        const tmp = this.currentFloor.floorNumber + 1;
+        this.currentFloor = new Floor(this.currentZone, tmp);
     }
 
-    floorChanged(floor) {
-        this.floor = floor;
-        this.countKill = 0;
-        this.passageOk = false;
-        this.rooms.forEach(r => {r.isActive = false});
+    floorChanged(floorNumber) {
+        this.currentFloor = new Floor(this.currentZone, floorNumber);
     }
 
-    zoneChanged(zoneID) {
-        this.zoneID = zoneID;
-        const zoneData = DDUtility.zoneData(this.zoneID);
-        if (zoneData) {
-            this.inDD = true;
-            this.baseFloor = zoneData.baseFloor;
-            this.rooms = zoneData.layout.rooms;
-            this.passages = zoneData.layout.passages;
-            this.floorChanged(this.baseFloor);
+    zoneChanged(e) {
+        this.currentZone = DDUtility.getZone(e.zoneID);
+        this.floorChanged(this.currentZone.baseFloorNumber);
+    }
+
+    wheel(e) {
+        if (e.deltaY < 0) { //e.deltaY == -100
+            const newScale = this.scale * 1.20;
+            this._scale = Math.min(newScale, 3.0);
         }
-        else {
-            this.inDD = false;
-            this.floor = 0;
-            this.countKill = 0;
-            this.passageOk = false;
+        else if (e.deltaY > 0) { //e.deltaY == 100
+            const newScale = this.scale / 1.20;
+            this._scale = Math.max(newScale, 0.8);
         }
     }
 
-    draw(e) {
+    updateCombatants(e) {
+        this.currentFloor.update(e.all, this.webhook);
+        this.self = e.self ? e.self : {PosX:0, PosY:0, Heading:0};
+        this.currentRoomName = this.currentZone.getCurrentRoomName(this.self);
+    }
+
+    draw() {
         let canvas = document.getElementById('canvas');
-        canvas.width = document.querySelector("#canvasWrapper").offsetWidth;
-        canvas.height = canvas.width;
-        if (!canvas.getContext) {
+        if (!canvas || !canvas.getContext) {
             return;   
         }
-/*
-        var poss = e.mobs.map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
-        poss = poss.concat(e.treasures.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
-        //poss = poss.concat(e.treasuresGold.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
-        //poss = poss.concat(e.treasuresSilver.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
-        //poss = poss.concat(e.treasuresBronze.map(m=>{return {PosX:m.PosX, PosY:m.PosY}}));
-        if (e.self) {
-            poss.push({PosX:e.self.PosX, PosY:e.self.PosY});
-        }
-        if (e.cairnOfPassage) {
-            poss.push({PosX:e.cairnOfPassage.PosX, PosY:e.cairnOfPassage.PosY});
-        }
-        if (e.cairnOfReturn) {
-            poss.push({PosX:e.cairnOfReturn.PosX, PosY:e.cairnOfReturn.PosY});
-        }*/
-        var poss = e.all.filter(c => c.Name != null).map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
-
-        this.rooms.forEach(r=>r.activate(poss));
+        canvas.width = document.querySelector("#canvasWrapper").offsetWidth;
+        canvas.height = canvas.width;
 
         var ctx = canvas.getContext('2d');
 
@@ -138,16 +271,6 @@ class DDManager {
         ctx.fillStyle = "rgba(128, 128, 255, 0.05)";
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        this.self = e.self ? e.self : {PosX:0, PosY:0, Heading:0};
-        if (e.self) {
-            const currentRoom = this.rooms.find(r => r.containsPos(e.self));
-            if (currentRoom) {
-                this.currentRoom = currentRoom.name;
-            }
-            else {
-                this.currentRoom = '';
-            }
-        }https://lanaklein14.github.io/potd/dd.htm
 
         ctx.save();
         ctx.translate(canvas.width/2, canvas.height/2);
@@ -166,14 +289,15 @@ class DDManager {
         ctx.closePath();
         ctx.restore();
 
-        this.rooms.forEach(r => {
-            r.draw(ctx, this.self, this.scale);
+        this.currentZone.layout.rooms.forEach(r => {
+            r.draw(ctx, this.self, this.scale, this.currentFloor.activeRoomNames);
         })
-        this.passages.forEach(r => {
-            r.draw(ctx, this.self);
+        this.currentZone.layout.passages.forEach(r => {
+            r.draw(ctx, this.self, this.currentFloor.activeRoomNames);
         })
 
-        e.mobs.filter(m=>{return m.HPP > 0.0}).forEach(m => {
+    
+        this.currentFloor.mobs.filter(m=> m.HPP > 0.0).forEach(m => {
             ctx.save();
             ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
             if (this.isMimic(m.BNpcNameID)) {
@@ -225,7 +349,7 @@ class DDManager {
             ctx.restore();
         });
 
-        e.traps.filter(t=>{return t.PosX != 0.0}).forEach(m => {
+        this.currentFloor.traps.forEach(m => {
             ctx.save();
             ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
             ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
@@ -240,24 +364,12 @@ class DDManager {
             ctx.closePath();
             ctx.restore();
         });
-/*
-        if (e.cairnOfReturn) {
-            ctx.save();
-            ctx.translate(e.cairnOfReturn.PosX-this.self.PosX, e.cairnOfReturn.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgCairnOfReturn, -5, -5, 10, 10);
-            ctx.restore();
-        }
-*/
-        const treasures = e.all.filter(c=> 
-//            (c.type == 7 && c.BNpcID == 2007358) || //Gold Coffer
-//            (c.type == 7 && c.BNpcID == 2007357) || //Silver Coffer
-//            (c.type == 4 && c.BNpcID == 782) || //Bronze Coffer
-//            (c.type == 7 && c.BNpcID == 2007543) || //Accursed Hoarded
-            (c.Name == "宝箱") || //not treasures //宝箱
-            (c.Name == "埋もれた財宝") //not treasures //埋もれた財宝
-        );
-        treasures.forEach(t => {
+        
+        for (const prop in this.currentFloor.treasureMap) {
+            const t = this.currentFloor.treasureMap[prop];
+            if (t.opened) {
+                continue;
+            }
             const img = DDManager.getImage(t);
             if (img) {
                 ctx.save();
@@ -266,16 +378,10 @@ class DDManager {
                 ctx.drawImage(img, -5, -5, 10, 10);
                 ctx.restore();
             }
-        });
+        };
 
-        const locations = e.all.filter(c=> 
-            (c.type == 7 && c.BNpcID == 2007188) || //Cairn Of Passage
-            (c.type == 7 && c.BNpcID == 2007187) || //Cairn Of Return
-            (c.type == 7 && c.BNpcID == 2005809) || //Exit1
-            (c.type == 7 && c.BNpcID == 2006016) || //Exit2
-            (c.type == 7 && c.BNpcID == 2006012) //Stairs
-        );
-        locations.forEach(t => {
+        for (const prop in this.currentFloor.locationMap) {
+            const t = this.currentFloor.locationMap[prop];
             const img = DDManager.getImage(t);
             if (img) {
                 ctx.save();
@@ -284,167 +390,103 @@ class DDManager {
                 ctx.drawImage(img, -5, -5, 10, 10);
                 ctx.restore();
             }
-        });
-/*
-        e.treasuresGold.forEach(m => {
-            ctx.save();
-            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgTresureGold, -5, -5, 10, 10);
-            ctx.restore();
-        });
-
-        e.treasuresSilver.forEach(m => {
-            ctx.save();
-            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgTresureSilver, -5, -5, 10, 10);
-            ctx.restore();
-        });
-
-        e.treasuresBronze.forEach(m => {
-            ctx.save();
-            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgTresureBronze, -5, -5, 10, 10);
-            ctx.restore();
-        });
-*/
-/*
-        // Position系
-        e.all.filter(c => c.BNpcID == 2005809 || c.BNpcID == 2006016).forEach(t => {
-            ctx.save();
-            ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgExit, -5, -5, 10, 10);
-            ctx.restore();
-        });
-
-        e.all.filter(c => c.BNpcID == 2006012).forEach(t => {
-            ctx.save();
-            ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgStairs, -5, -5, 10, 10);
-            ctx.restore();
-        });
-
-        if (e.cairnOfPassage) {
-            ctx.save();
-            ctx.translate(e.cairnOfPassage.PosX-this.self.PosX, e.cairnOfPassage.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.drawImage(imgCairnOfPassage, -5, -5, 10, 10);
-            ctx.restore();
-        }
-  */
+        };
         ctx.restore();
+    }
 
+    processLogLine(e) {
+        if (e.line[0] == '00') {
+            if (e.line[2] == '0839') {
+                var result1 = new RegExp('「死者の宮殿 B(.+)～.+」の攻略を開始した。').exec(e.line[4]);
+                var result2 = new RegExp('地下(.+)階').exec(e.line[4])
+                var result3 = new RegExp('転移の石塔が起動した！').exec(e.line[4]);
+                var result4 = new RegExp('転移が実行された！').exec(e.line[4]);
+                var result5 = new RegExp('(.+)はこれ以上、持つことが').exec(e.line[4]);
+                const treasureGetMessages = [
+                    'は、(.+)を手に入れた！',
+                    '輝き、(強化値が.+)になった！',
+                    'の(強化に失敗)した',
+                    '宝箱は(ミミック)だった！',
+                    'トラップが起動し、宝箱が(爆発)した……'
+                ];
+                if (result1) {
+                    console.log(e);
+                    this.floorChanged(parseInt(result1[1], 10));
+                }
+                else if (result2) {
+                    console.log(e);
+                    this.floorChanged(parseInt(result2[1], 10));
+                }
+                else if (result3) {
+                    console.log(e);
+                    this.currentFloor.passageOk = true;
+                }
+                else if (result4) {
+                    console.log(e);
+                    this.floorChanging();
+                }
+                else if (result5) {
+                    console.log(e);
+                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                    nearestTreasure.item = result5[1];
+                }
+                else {
+                    for (const msg of treasureGetMessages) {
+                        const result = new RegExp(msg).exec(e.line[4]);
+                        if (result) {
+                            console.log(e);
+                            const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                            nearestTreasure.opened = true;
+                            nearestTreasure.item = result[1];
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (e.line[2] == '083c') {
+                var result1 = new RegExp('(.+)を所持しているため、').exec(e.line[4]);
+                if (result1) {
+                    console.log(e);
+                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                    if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
+                        nearestTreasure.opened = true;
+                        nearestTreasure.item = result1[1];
+                    }
+                }
+            }
+            else if (e.line[2] == '083e') {
+                var result1 = new RegExp('は(.+)を手に入れた。').exec(e.line[4]);
+                if (result1) {
+                    console.log(e);
+                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                    if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
+                        nearestTreasure.opened = true;
+                        nearestTreasure.item = result1[1];
+                    }
+                }
+            }
+            else if (e.line[2] == '0b3a' && e.line[4].match(/.*を倒した。$/)) {
+                console.log(e);
+                this.currentFloor.countKill += 1;
+            }
+        }
+        else if (e.line[0] == '21' && e.line[3] == 'トラップ') {
+            // 21|2020-07-24T22:43:43.1830000+09:00|4000F39C|トラップ|1893|武器強化|E0000000||0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|||||||||||59|59|0|10000|0|1000|-431.1381|303.7211|0.1999984|2.356182|00005657|9c705148be92a9463c487c51845bea54
+            console.log(e);
+            const targetTrap = this.currentFloor.trapMap[parseInt(e.line[2], 16)];
+            targetTrap.trapType = e.line[5];
+        }
+        else if (e.line[0] == '22' && e.line[3] == 'トラップ') {
+            // 22|2020-07-25T07:13:25.8550000+09:00|400001F0|トラップ|1886|阻害トラップ|10251533|Ruruca Ruca|800000E|26C0000|E|70000|1B|18868000|0|0|0|0|0|0|0|0|0|0|159|159|10000|10000|0|1000|-292.0237|303.3113|0|1.467882|44|44|0|10000|0|1000|-291.1757|302.3187|-2.384186E-07|-4.792213E-05|00000068|6f151685c34e1586778ce9fec58c1558
+            console.log(e);
+            const targetTrap = this.currentFloor.trapMap[parseInt(e.line[2], 16)];
+            targetTrap.trapType = e.line[5];
+        }
     }
 
     isDangerMob(bnpcNameID) {
         // モブ名⇒ID https://xivapi.com/search?indexes=BnpcName&string_column=Name_ja&string_algo=term&columns=ID,Name_ja&string=%E3%83%87%E3%82%A3%E3%83%BC%E3%83%97%E3%83%91%E3%83%AC%E3%82%B9%E3%83%BB%E3%82%AD%E3%83%BC%E3%83%91%E3%83%BC
-        const dangerMobNameIDMap = {
-            561: [ //B1 - B10
-                4983, //パレス・ジズ
-                4984, //ロストゴブリン
-                4985, //パレス・ダングビートル
-            ],
-            562: [ //B11 - B20
-                4996, //パレス・プリン
-                4997, //パレス・コブラ
-                4998, //パレス・ビロコ
-            ],
-            563: [ //B21 - B30
-                5009, //パレス・デュラハン
-                5010, //パレス・ミノタウロス
-                5011, //パレス・スカネテ
-            ],
-            564: [ //B31 - B40
-                5022, //ナイトメア・サキュバス
-                5023, //ナイトメア・カトブレパス
-                5024, //パレス・グルマン
-            ],
-            565: [ //B41 - B50
-                5035, //パレス・マンティコア
-                5354, //パレス・レイス
-                5355, //パレス・グレイブキーパー
-            ],
-            593: [ //B51 - B60
-                5302, //パレス・アヌビス
-                5307, //パレス・マナアイドル
-                5305, //パレス・アークデーモン
-            ],
-            594: [ //B61 - B70
-                5317, //パレス・エルブスト
-                5319, //パレス・ブレードビネガロン
-                5316, //パレス・ミロドン
-            ],
-            595: [ //B71 - B80
-                5331, //パレス・アンズー
-                5325, //パレス・サイクロプス
-                5324, //バード・オブ・パレス
-            ],
-            596: [ //B81 - B90
-                5343, //パレス・ワモーラ
-                5342, //パレス・ハパリット
-                5344, //パレス・キマイラ
-            ],
-            597: [ //B91 - B100
-                5354, //パレス・レイス
-                5353, //パレス・アイアンコース
-                5355, //パレス・グレイブキーパー
-            ],
-            598: [ //B101 - B110
-                5368, //ディープパレス・ジズ
-                5369, //ゴブリン・アドベンチャラー
-                5370, //ディープパレス・ダングビートル
-            ],
-            599: [ //B111 - B120
-                5374, //ディープパレス・ギガントード
-                5382, //ディープパレス・コブラ
-                5383, //ディープパレス・ビロコ
-            ],
-            600: [ //B121 - B130
-                5394, //ディープパレス・デュラハン
-                5395, //ディープパレス・ミノタウルス
-                5396, //ディープパレス・スカネテ
-            ],
-            601: [ //B131 - B140
-                5409, //ディープパレス・グルマン
-                5402, //ディープパレス・アーリマン
-                5408, //ディープパレス・カトブレパス
-            ],
-            602: [ //B141 - B150
-                5421, //ディープパレス・マンティコア
-                5422, //ディープパレス・レイス
-                5423, //ディープパレス・キーパー
-            ],
-            603: [ //B151 - B160
-                5432, //ディープパレス・シュワブチ
-                5436, //ディープパレス・マロリス
-                5434, //ディープパレス・アークデーモン
-            ],
-            604: [ //B161 - B170
-                5445, //ディープパレス・トゥルスス
-                5447, //ディープパレス・ビネガロン
-                5448, //ディープパレス・プテラノドン
-            ],
-            605: [ //B171 - B180
-                5453, //ディープパレス・スノウクロプス
-                5451, //ディープパレス・ウィセント
-                5452, //バード・オブ・ディープパレス
-            ],
-            606: [ //B181 - B190
-                5469, //ディープパレス・ワモーラ
-                5470, //ディープパレス・ガルム
-                5468, //ディープパレス・ヴィンドスルス
-            ],
-            607: [ //B191 - B200
-                5475, //ディープパレス・アイアンコース
-                5473, //ディープパレス・ファハン
-                5423, //ディープパレス・キーパー
-            ]
-        }
-        return dangerMobNameIDMap[this.zoneID] ? dangerMobNameIDMap[this.zoneID].includes(bnpcNameID) : false;
+        return this.currentZone.patrolMobNameIDMap.includes(bnpcNameID);
     }
     isMimic(bnpcNameID) {
         return bnpcNameID == 2566; //ミミック

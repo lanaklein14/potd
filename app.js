@@ -40,8 +40,8 @@ function debug2(e) {
             return 0;
         }
         let list = [];//e.traps.filter(t=>{return t.PosX != 0}).sort((a,b) => distance(a, b, e.self));
-        list = e.others.sort((a,b) => distance(a, b, e.self));
-        //list = e.all.sort((a,b) => a.ID - b.ID);
+        //list = e.others.sort((a,b) => distance(a, b, e.self));
+        list = e.all.sort((a,b) => a.ID - b.ID);
         //list = list.concat(e.treasures.filter(t=>{return t.BNpcID == 2007543}).sort((a,b) => distance(a, b, e.self)));
         let html = '<table border="1"><tr><th>ID</th><th>PosX</th><th>PosY</th><th>Name</th><th>Type</th><th>TargetID</th><th>BNpcID</th><th>BNpcNameID</th><th>CastBuffID</th></tr>';
         list.forEach(t=>{
@@ -54,6 +54,8 @@ function debug2(e) {
     }
 
 }
+
+
 
 const app = new Vue({
     el: '#app',
@@ -69,54 +71,29 @@ const app = new Vue({
             }
         });
         document.addEventListener("wheel", e =>  {
-            if (e.deltaY == -100) {
-                this.ddManager.scale *= 1.20;
-                this.ddManager.scale = Math.min(this.ddManager.scale, 3.0);
-            }
-            else if (e.deltaY == 100) {
-                this.ddManager.scale /= 1.20;
-                this.ddManager.scale = Math.max(this.ddManager.scale, 0.8);
-            }
+            this.ddManager.wheel(e);
         });
         addOverlayListener("onAddonExampleEmbeddedTimerFiredEvent", (e) => {
-            this.ddManager.draw(e);
+            this.ddManager.updateCombatants(e);
+            this.ddManager.draw();
 //            let newPosX = Math.floor((e.self.PosX + 1075)/5) / 10.0;
 //            let newPosY = Math.floor((e.self.PosY + 1075)/5) / 10.0;
-            debug(e);
+            //debug(e);
+            const trapdiv = document.querySelector('#traps');
+            this.ddManager.webhook = trapdiv != null;
+            var debugDIV = document.querySelector('#debug');
+            this.ddManager.currentFloor.treasureList(debugDIV);
+            this.ddManager.currentFloor.trapList(trapdiv);
+    
             debug2(e);
-            let encounter = document.querySelector("#encounter");
-            if (encounter) {
-                encounter.innerText = JSON.stringify(e.others, null, 4);
-            }
         });
         
         addOverlayListener("ChangeZone", (e) => {
-            this.ddManager.zoneChanged(e.zoneID);
+            this.ddManager.zoneChanged(e);
         });
         
         addOverlayListener("LogLine", (e) => {
-            if (e.line[0] == '00' && e.line[2] == '0839') {
-                var result1 = new RegExp('「死者の宮殿 B(.+)～.+」の攻略を開始した。').exec(e.line[4]);
-                var result2 = new RegExp('地下(.+)階').exec(e.line[4])
-                var result3 = new RegExp('転移の石塔が起動した！').exec(e.line[4]);
-                var result4 = new RegExp('転移が実行された！').exec(e.line[4]);
-        
-                if (result1) {
-                    this.ddManager.floorChanged(parseInt(result1[1], 10));
-                }
-                else if (result2) {
-                    this.ddManager.floorChanged(parseInt(result2[1], 10));
-                }
-                else if (result3) {
-                    this.ddManager.passageOk = true;
-                }
-                else if (result4) {
-                    this.ddManager.floorChanging();
-                }
-            }
-            else if (e.line[0] == '00' && e.line[2] == '0b3a' && e.line[4].match(/.*を倒した。$/)) {
-                this.ddManager.countKill += 1;
-            }
+            this.ddManager.processLogLine(e);
         });
         startOverlayEvents();
     
@@ -125,7 +102,7 @@ const app = new Vue({
     },
     computed: {
         selfPos() {
-            return `${this.ddManager.currentRoom}(X:${Math.floor(this.ddManager.self.PosX)}, Y:${Math.floor(this.ddManager.self.PosY)})`
+            return this.ddManager.selfPos;
         }
     }
   })
