@@ -51,8 +51,8 @@ pre, #traplist, .debug {
     white-space: pre-wrap;
     background: rgba(0, 0, 0, 0.7);
     color: #fff;
-    padding: 5px;
-    font: 14px monospace;
+    padding: 2px;
+    font: 6px monospace;
 }
 th,td {
     color: #fff;

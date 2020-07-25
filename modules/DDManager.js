@@ -126,6 +126,35 @@ class Floor {
         }
     
     }
+    treasureList2(node) {
+        if (node) {
+            let html = '<table width="100%" border="1"><tr><th>種別</th><th>X</th><th>Y</th><th>距離</th><th>状態</th><th>結果</th></tr>';
+            Object.values(this.treasureMap).sort((a, b) => a.distance - b.distance).forEach(t => {
+                html += `<tr><td>${t.BNpcID == 2007358 ? '金箱' : 
+                                                   t.BNpcID == 2007357 ? '銀箱' : 
+                                                   t.BNpcID == 2006020 ? '銅箱' : 
+                                                   t.BNpcID == 782 ? '銅箱2' : 
+                                                   t.BNpcID == 2007543 ? '財宝' : 'それ他'}</td><td>${Math.floor(t.PosX)}</td><td>${Math.floor(t.PosY)}</td>
+                    <td>${Math.floor(t.distance)}</td><td>${t.opened == true ? '開' : '-'}</td><td>${t.item ? t.item : ''}</td></td>
+                </tr>`
+            });
+            html += '</table>'
+            node.innerHTML = html;
+        }
+    }
+    trapList2(node) {
+        if (node) {
+            let html = '<table width="100%" border="1"><tr><th>種別</th><th>X</th><th>Y</th><th>結果</th></tr>';
+            Object.values(this.trapMap).filter(t => !t.treasure).forEach(t => {
+                html += `<tr><td>${t.treasure == true ? '箱トラップ' : '床トラップ'}</td><td>${Math.floor(t.PosX)}</td><td>${Math.floor(t.PosY)}</td>
+                    <td>${t.trapType ? t.trapType : ''}</td>
+                </tr>`
+            });
+            html += '</table>'
+            node.innerHTML = html;
+        }
+    
+    }
 
     webhookNewTrap(t) {
         const payload = {
@@ -170,13 +199,14 @@ class Floor {
 }
 
 class DDManager {
-    constructor(webhook=false) {
+    constructor() {
         this.currentZone = DDUtility.getZone(-1);
         this.currentFloor = new Floor(this.currentZone, -1);
         this.currentRoomName = '';
-        this._scale = 1.2;
+        const scale = parseFloat(localStorage.getItem('scale'));
+        this._scale = !isNaN(scale) ? scale : 1.2;
         this.self = {PosX:0, PosY:0, Heading:0};
-        this.webhook=webhook;
+        this.webhook = false;
     }
 
     static getImage(combatant) {
@@ -249,6 +279,7 @@ class DDManager {
             const newScale = this.scale / 1.20;
             this._scale = Math.max(newScale, 0.8);
         }
+        localStorage.setItem('scale', this._scale);
     }
 
     updateCombatants(e) {
@@ -458,16 +489,19 @@ class DDManager {
                 var result1 = new RegExp('は(.+)を手に入れた。').exec(e.line[4]);
                 if (result1) {
                     console.log(e);
-                    const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
-                    if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
-                        nearestTreasure.opened = true;
-                        nearestTreasure.item = result1[1];
+                    if (Object.values(this.currentFloor.treasureMap).length > 0) {
+                        const nearestTreasure = Object.values(this.currentFloor.treasureMap).reduce((a, b) => a.distance < b.distance ? a : b);
+                        if (nearestTreasure && nearestTreasure.distance < 10.0 && nearestTreasure.type == 4) {
+                            nearestTreasure.opened = true;
+                            nearestTreasure.item = result1[1];
+                        }                        
                     }
                 }
             }
             else if (e.line[2] == '0b3a' && e.line[4].match(/.*を倒した。$/)) {
                 console.log(e);
                 this.currentFloor.countKill += 1;
+                //window.callOverlayHandler({ call: 'addonExampleSay', text: e.line[4] })
             }
         }
         else if (e.line[0] == '21' && e.line[3] == 'トラップ') {

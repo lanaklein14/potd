@@ -61,8 +61,11 @@ const app = new Vue({
     el: '#app',
     data: {
         ddManager: new DDManager(),
+        isHidden: true
     },
     mounted: function() {
+        this.ddManager.webhook = (document.querySelector('#treasure') != null);
+
         document.addEventListener("onOverlayStateUpdate", function (e) {
             if (!e.detail.isLocked) {
                 document.documentElement.classList.add("resizeHandle");
@@ -80,11 +83,14 @@ const app = new Vue({
 //            let newPosY = Math.floor((e.self.PosY + 1075)/5) / 10.0;
             //debug(e);
             const trapdiv = document.querySelector('#traps');
-            this.ddManager.webhook = trapdiv != null;
             var debugDIV = document.querySelector('#debug');
             this.ddManager.currentFloor.treasureList(debugDIV);
             this.ddManager.currentFloor.trapList(trapdiv);
     
+            this.ddManager.currentFloor.treasureList2(document.querySelector('#treasure'));
+            this.ddManager.currentFloor.trapList2(document.querySelector('#trap'));
+
+
             debug2(e);
         });
         

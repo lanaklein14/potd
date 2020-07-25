@@ -10,7 +10,9 @@
             <div id="canvasWrapper">
                 <canvas id="canvas"></canvas>
             </div>
-            <div id="ddFooter">{{selfPos}}</div>
+            <div id="ddFooter">{{selfPos}}<span style="float: right" v-on:click="isHidden = !isHidden">▼</span></div>
+            <div id="treasure" v-show="!isHidden" class="debug"></div>
+            <div id="trap" v-show="!isHidden" class="debug"></div>
             <!--div id="debug" class="debug"></div-->
             <!--div id="debug2" class="debug"></div-->
 
