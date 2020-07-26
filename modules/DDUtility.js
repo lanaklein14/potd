@@ -43,11 +43,11 @@
     new Room('B20', -339, 397, -302, 433), //見直しOK
     new Room('B21', -242, 407, -205, 444), //見直しOK
 
-    new Room('C1', -320, -327, -281, -288), //見直しOK
-    new Room('C2', -326, -246, -275, -195), //見直しOK
+//    new Room('C1', -320, -327, -281, -288), //見直しOK
+    //new Room('C2', -326, -246, -275, -195), //見直しOK
 
-    new Room('D1', 284, 288, 315, 317),
-    new Room('D2', 275, 349, 324, 398),
+    //new Room('D1', 284, 288, 315, 317),
+    //new Room('D2', 275, 349, 324, 398),
 ]);
 // Add all passages
 layout01_50_101_150.addPassage('A1', 'A5');
@@ -98,8 +98,8 @@ layout01_50_101_150.addPassage('B14', 'B15');
 layout01_50_101_150.addPassage('B15', 'B16');
 layout01_50_101_150.addPassage('B16', 'B17');
 layout01_50_101_150.addPassage('B17', 'B18');
-layout01_50_101_150.addPassage('C1', 'C2');
-layout01_50_101_150.addPassage('D1', 'D2');
+//layout01_50_101_150.addPassage('C1', 'C2');
+//layout01_50_101_150.addPassage('D1', 'D2');
 
 // Add all traps
 layout01_50_101_150.addTrap(242.93, -400.19);
@@ -432,15 +432,18 @@ const layoutExit = new Layout([
     new Room('Exit B60', -215, -216, -185, -185),
     new Room('Exit B70', -215, -116, -185, -85),
     new Room('Exit B80', -215, -16, -185, 15),
-    new Room('Exit B90', -315, -16, -283, 15)
+    new Room('Exit B90', -315, -16, -283, 15),
+    new Room('Exit B130', -217, 235, -183, 265),
+    new Room('Exit B140', -315, 235, -283, 265),
+    new Room('Exit B150', -315, 135, -283, 165),
 ]);
 
 class Zone {
-    constructor(id, baseFloorNumber, layout, patrolMobNameIDMap) {
+    constructor(id, baseFloorNumber, layout, patrolMobNameIDs, bossFloorLayout=new BossFloorLayout([])) {
         this.id = id;
         this.baseFloorNumber = baseFloorNumber
-        this.layout = layout;
-        this.patrolMobNameIDMap = patrolMobNameIDMap;
+        this.layout = layout.concat(bossFloorLayout);
+        this.patrolMobNameIDs = patrolMobNameIDs;
     }
     get inDD() {
         return this.baseFloorNumber >= 0;
@@ -460,6 +463,11 @@ class Zone {
         const currentRoom = this.layout.rooms.find(r => r.containsPos(self));
         return currentRoom ? currentRoom.name : '';
     }
+
+    isDangerMob(bnpcNameID) {
+        return this.patrolMobNameIDs.includes(bnpcNameID);
+    }
+
 }
 
 class DDUtility {
@@ -470,104 +478,189 @@ class DDUtility {
                 4983, //パレス・ジズ
                 4984, //ロストゴブリン
                 4985, //パレス・ダングビートル
-            ]), 
+            ], new BossFloorLayout([
+                new Room('Exit B10', -320, -327, -281, -288),
+                new Room('Boss B10', -326, -246, -275, -195),
+            ])), 
             562: new Zone(562, 11, layout01_50_101_150, [ //B11 - B20
                 4996, //パレス・プリン
                 4997, //パレス・コブラ
                 4998, //パレス・ビロコ
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B20', -320, -327, -281, -288, true),
+                new Room('Boss B20', -326, -246, -275, -195, true),
+            
+            ])), 
             563: new Zone(563, 21, layout01_50_101_150, [ //B21 - B30
                 5009, //パレス・デュラハン
                 5010, //パレス・ミノタウロス
                 5011, //パレス・スカネテ
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B30', -320, -327, -281, -288, true),
+                new Room('Boss B30', -326, -246, -275, -195, true),
+            
+            ])), 
             564: new Zone(564, 31, layout01_50_101_150, [ //B31 - B40
                 5022, //ナイトメア・サキュバス
                 5023, //ナイトメア・カトブレパス
                 5024, //パレス・グルマン
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B40', -320, -327, -281, -288, true),
+                new Room('Boss B40', -326, -246, -275, -195, true),
+            
+            ])), 
             565: new Zone(565, 41, layout01_50_101_150, [ //B41 - B50
                 5035, //パレス・マンティコア
                 5036, //ナイトメア・レイス  5354パレス・レイス
                 5355, //パレス・グレイブキーパー
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B50', 284, 288, 315, 317, true),
+                new Room('Boss B50', 275, 349, 324, 398, true),
+            
+            ])), 
             593: new Zone(593, 51, layout51_80_151_180, [ //B51 - B60
                 5302, //パレス・アヌビス
                 5307, //パレス・マナアイドル
                 5305, //パレス・アークデーモン
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B60', -320, -327, -281, -288, true),
+                new Room('Boss B60', -326, -246, -275, -195, true),
+            
+            ])), 
             594: new Zone(594, 61, layout51_80_151_180, [ //B61 - B70
                 5317, //パレス・エルブスト
                 5319, //パレス・ブレードビネガロン
                 5316, //パレス・ミロドン
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B70', -320, -327, -281, -288, true),
+                new Room('Boss B70', -326, -246, -275, -195, true),
+            
+            ])), 
             595: new Zone(595, 71, layout51_80_151_180, [ //B71 - B80
                 5331, //パレス・アンズー
                 5325, //パレス・サイクロプス
                 5324, //バード・オブ・パレス
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B80', -320, -327, -281, -288, true),
+                new Room('Boss B80', -326, -246, -275, -195, true),
+            
+            ])), 
             596: new Zone(596, 81, layout81_100_181_200, [ //B81 - B90
                 5343, //パレス・ワモーラ
                 5342, //パレス・ハパリット
                 5344, //パレス・キマイラ
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B90', -320, -327, -281, -288, true),
+                new Room('Boss B90', -326, -246, -275, -195, true),
+            
+            ])), 
             597: new Zone(597, 91, layout81_100_181_200, [ //B91 - B100
                 5354, //パレス・レイス
                 5353, //パレス・アイアンコース
                 5355, //パレス・グレイブキーパー
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B100', -320, -327, -281, -288, true),
+                new Room('Boss B100', -326, -246, -275, -195, true),
+            
+            ])), 
             598: new Zone(598, 101, layout01_50_101_150, [ //B101 - B110
                 5368, //ディープパレス・ジズ
                 5369, //ゴブリン・アドベンチャラー
                 5370, //ディープパレス・ダングビートル
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B110', -320, -327, -281, -288, true),
+                new Room('Boss B110', -326, -246, -275, -195, true),
+            
+            ])), 
             599: new Zone(599, 111, layout01_50_101_150, [ //B111 - B120
                 5374, //ディープパレス・ギガントード
                 5382, //ディープパレス・コブラ
                 5383, //ディープパレス・ビロコ
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B120', -320, -327, -281, -288, true),
+                new Room('Boss B120', -326, -246, -275, -195, true),
+            
+            ])), 
             600: new Zone(600, 121, layout01_50_101_150, [ //B121 - B130
                 5394, //ディープパレス・デュラハン
                 5395, //ディープパレス・ミノタウルス
                 5396, //ディープパレス・スカネテ
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B130', -316, -312, -285, -285),
+                new Room('Boss B130', -326, -262, -275, -211),
+            
+            ])), 
             601: new Zone(601, 131, layout01_50_101_150, [ //B131 - B140
                 5409, //ディープパレス・グルマン
                 5402, //ディープパレス・アーリマン
                 5408, //ディープパレス・カトブレパス
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B140', -316, -317, -285, -285),
+                new Room('Boss B140', -326, -262, -275, -213),
+            
+            ])), 
             602: new Zone(602, 141, layout01_50_101_150, [ //B141 - B150
                 5421, //ディープパレス・マンティコア
                 5422, //ディープパレス・レイス
                 5423, //ディープパレス・キーパー
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B140', -316, -317, -285, -285),
+                new Room('Boss B150', -326, -262, -275, -211),
+            ])), 
             603: new Zone(603, 151, layout51_80_151_180, [ //B151 - B160
                 5432, //ディープパレス・シュワブチ
                 5436, //ディープパレス・マロリス
                 5434, //ディープパレス・アークデーモン
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B160', -320, -327, -281, -288, true),
+                new Room('Boss B160', -326, -246, -275, -195, true),
+            
+            ])), 
             604: new Zone(604, 161, layout51_80_151_180, [ //B161 - B170
                 5445, //ディープパレス・トゥルスス
                 5447, //ディープパレス・ビネガロン
                 5448, //ディープパレス・プテラノドン
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B170', -320, -327, -281, -288, true),
+                new Room('Boss B170', -326, -246, -275, -195, true),
+            
+            ])), 
             605: new Zone(605, 171, layout51_80_151_180, [ //B171 - B180
                 5453, //ディープパレス・スノウクロプス
                 5451, //ディープパレス・ウィセント
                 5452, //バード・オブ・ディープパレス
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B180', -320, -327, -281, -288, true),
+                new Room('Boss B180', -326, -246, -275, -195, true),
+            
+            ])), 
             606: new Zone(606, 181, layout81_100_181_200, [ //B181 - B190
                 5469, //ディープパレス・ワモーラ
                 5470, //ディープパレス・ガルム
                 5468, //ディープパレス・ヴィンドスルス
-            ]),
+            ], new BossFloorLayout([
+                new Room('Exit B190', -320, -327, -281, -288, true),
+                new Room('Boss B190', -326, -246, -275, -195, true),
+            
+            ])), 
             607: new Zone(607, 191, layout81_100_181_200, [ //B191 - B200
                 5475, //ディープパレス・アイアンコース
                 5473, //ディープパレス・ファハン
                 5423, //ディープパレス・キーパー
-            ]),
-            570: new Zone(570, 0, layoutExit, []) //B191 - B200
+            ], new BossFloorLayout([
+                new Room('Exit B200', -320, -327, -281, -288, true),
+                new Room('Boss B200', -326, -246, -275, -195, true),
+            
+            ])), 
+            570: new Zone(570, 0, layoutExit, []) //Exit Area
         };
         return zoneMap[zoneID] ? zoneMap[zoneID] : new Zone(zoneID, -1, new Layout([]), []);
+    }
+
+    static isMimic(bnpcNameID) {
+        return bnpcNameID == 2566; //ミミック
+    }
+    static isPygmaioi(bnpcNameID) {
+        return bnpcNameID == 5041; //ピグマイオイ
     }
 }

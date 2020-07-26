@@ -24,8 +24,11 @@ class Floor {
         this.zone = zone;
         this.floorNumber = floorNumber;
         this.changing = changing;
+
         this.countKill = 0;
         this.passageOk = false;
+
+        this.self = {PosX:0, PosY:0, Heading:0};
         this.mobs = [];
         this.treasures = [];
         this.traps = [];
@@ -35,11 +38,15 @@ class Floor {
         this.treasureMap = {};
         this.trapMap = {};
     }
+
+
+
     update(combatants, webhook=false) {
         if (this.changing) {
             return;
         }
-        const self = combatants.length > 0 ? combatants[0] : {PosX:0, PosY:0, Heading:0};
+        this.self = combatants.length > 0 ? combatants[0] : {PosX:0, PosY:0, Heading:0};
+        
         //ActiveRoomsの更新
         var poss = combatants.filter(c => c.Name != null).map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
         this.zone.layout.rooms.filter(r => poss.some(p=>r.containsPos(p))).forEach(r => this.activeRoomNames.add(r.name));
@@ -63,7 +70,7 @@ class Floor {
                 }
             }
         });
-        Object.values(this.treasureMap).forEach(t => t.distance = Math.abs(t.PosX-self.PosX) + Math.abs(t.PosY-self.PosY));
+        Object.values(this.treasureMap).forEach(t => t.distance = Math.abs(t.PosX-this.self.PosX) + Math.abs(t.PosY-this.self.PosY));
 
         //Trapsの更新
         this.traps = combatants.filter(c => c.type == 2 && c.BNpcID == 6388);
@@ -94,11 +101,143 @@ class Floor {
             (c.type == 7 && c.BNpcID == 2006016) || //Exit2
             (c.type == 7 && c.BNpcID == 2006012) //Stairs
         );
-        this.locations.forEach(t => t.distance = Math.abs(t.PosX-self.PosX) + Math.abs(t.PosY-self.PosY));
+        this.locations.forEach(t => t.distance = Math.abs(t.PosX-this.self.PosX) + Math.abs(t.PosY-this.self.PosY));
 
         //trap 7   2007184
 
     }
+
+    draw(canvas, scale) {
+        if (!canvas || !canvas.getContext) {
+            return;   
+        }
+        canvas.width = document.querySelector("#canvasWrapper").offsetWidth;
+        canvas.height = canvas.width;
+
+        var ctx = canvas.getContext('2d');
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "rgba(128, 128, 255, 0.05)";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.scale(scale, scale);
+
+        ctx.fillStyle = "rgba(0, 0, 255, 0.15)";
+        ctx.fillRect(-110, -110, 220, 220);
+        ctx.fillStyle = "rgba(255, 255, 64, 0.30)";
+
+        ctx.save();
+        ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+        ctx.beginPath();
+        ctx.arc(0, 0, 30, 0+1.0-this.self.Heading, Math.PI-1.0-this.self.Heading);
+        ctx.lineTo(0,0);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        this.zone.layout.rooms.forEach(r => {
+            r.draw(ctx, this.self, scale, this.activeRoomNames);
+        })
+        this.zone.layout.passages.forEach(r => {
+            r.draw(ctx, this.self, this.activeRoomNames);
+        })
+
+    
+        this.mobs.filter(m=> m.HPP > 0.0).forEach(m => {
+            ctx.save();
+            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
+            if (DDUtility.isMimic(m.BNpcNameID)) {
+                ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.strokeStyle = "rgba(255, 135, 15, 1.0)";
+                ctx.moveTo(0,-5);
+                ctx.lineTo(0,1);
+                ctx.moveTo(0,3);
+                ctx.lineTo(0,5);
+                ctx.stroke();
+                ctx.closePath();
+            }
+            else if (DDUtility.isPygmaioi(m.BNpcNameID)) {
+                ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.strokeStyle = "rgba(181, 88, 231, 1.0)";
+                ctx.moveTo(0,-5);
+                ctx.lineTo(0,1);
+                ctx.moveTo(0,3);
+                ctx.lineTo(0,5);
+                ctx.stroke();
+                ctx.closePath();
+            }
+            else if (this.zone.isDangerMob(m.BNpcNameID)) {
+                ctx.scale(Math.min(1.5/scale, 1.0), Math.min(1.5/scale, 1.0));
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+                ctx.arc(0, 0, 12, 0+1.0-m.Heading, Math.PI-1.0-m.Heading);
+                ctx.lineTo(0,0);
+                ctx.fill();
+                ctx.closePath();
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(255, 0, 0, 1.0)";
+                ctx.arc(0, 0, 5, 0, Math.PI*2, 0);
+                ctx.fill();
+                ctx.closePath();
+            }
+            else {
+                ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(0, 255, 0, 1.0)";
+                ctx.arc(0, 0, 2, 0, Math.PI*2, 0);
+                ctx.fill();
+                ctx.closePath();
+            }
+            ctx.restore();
+        });
+
+        this.traps.forEach(m => {
+            ctx.save();
+            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
+            ctx.scale(Math.min(2.0/this, 1.0), Math.min(2.0/scale, 1.0));
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000AA";
+            ctx.moveTo(-2,-2);
+            ctx.lineTo(2,2);
+            ctx.moveTo(2,-2);
+            ctx.lineTo(-2,2);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        });
+        
+        Object.values(this.treasureMap).filter(t => !t.opened).forEach(t => {
+            const img = DDManager.getImage(t);
+            if (img) {
+                ctx.save();
+                ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+                ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                ctx.drawImage(img, -5, -5, 10, 10);
+                ctx.restore();
+            }
+        });
+
+        this.locations.forEach(t => {
+            const img = DDManager.getImage(t);
+            if (img) {
+                ctx.save();
+                ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
+                ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                ctx.drawImage(img, -5, -5, 10, 10);
+                ctx.restore();
+            }
+        });
+        ctx.restore();
+    }
+
     treasureList(node) {
         if (node) {
             let html = '<h3>宝箱</h3><table border="1"><tr><th>ID</th><th>Type</th><th>PosX</th><th>PosY</th><th>Distance</th><th>Opened</th><th>Item</th><th>Comment</th></tr>';
@@ -290,136 +429,8 @@ class DDManager {
         this.currentRoomName = this.currentZone.getCurrentRoomName(this.self);
     }
 
-    draw() {
-        let canvas = document.getElementById('canvas');
-        if (!canvas || !canvas.getContext) {
-            return;   
-        }
-        canvas.width = document.querySelector("#canvasWrapper").offsetWidth;
-        canvas.height = canvas.width;
-
-        var ctx = canvas.getContext('2d');
-
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "rgba(128, 128, 255, 0.05)";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-
-
-        ctx.save();
-        ctx.translate(canvas.width/2, canvas.height/2);
-        ctx.scale(this.scale, this.scale);
-
-        ctx.fillStyle = "rgba(0, 0, 255, 0.15)";
-        ctx.fillRect(-110, -110, 220, 220);
-        ctx.fillStyle = "rgba(255, 255, 64, 0.30)";
-
-        ctx.save();
-        ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-        ctx.beginPath();
-        ctx.arc(0, 0, 30, 0+1.0-this.self.Heading, Math.PI-1.0-this.self.Heading);
-        ctx.lineTo(0,0);
-        ctx.fill();
-        ctx.closePath();
-        ctx.restore();
-
-        this.currentZone.layout.rooms.forEach(r => {
-            r.draw(ctx, this.self, this.scale, this.currentFloor.activeRoomNames);
-        })
-        this.currentZone.layout.passages.forEach(r => {
-            r.draw(ctx, this.self, this.currentFloor.activeRoomNames);
-        })
-
-    
-        this.currentFloor.mobs.filter(m=> m.HPP > 0.0).forEach(m => {
-            ctx.save();
-            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
-            if (this.isMimic(m.BNpcNameID)) {
-                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.strokeStyle = "rgba(255, 135, 15, 1.0)";
-                ctx.moveTo(0,-5);
-                ctx.lineTo(0,1);
-                ctx.moveTo(0,3);
-                ctx.lineTo(0,5);
-                ctx.stroke();
-                ctx.closePath();
-            }
-            else if (this.isPygmaioi(m.BNpcNameID)) {
-                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.strokeStyle = "rgba(181, 88, 231, 1.0)";
-                ctx.moveTo(0,-5);
-                ctx.lineTo(0,1);
-                ctx.moveTo(0,3);
-                ctx.lineTo(0,5);
-                ctx.stroke();
-                ctx.closePath();
-            }
-            else if (this.isDangerMob(m.BNpcNameID)) {
-                ctx.scale(Math.min(1.5/this.scale, 1.0), Math.min(1.5/this.scale, 1.0));
-                ctx.beginPath();
-                ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-                ctx.arc(0, 0, 12, 0+1.0-m.Heading, Math.PI-1.0-m.Heading);
-                ctx.lineTo(0,0);
-                ctx.fill();
-                ctx.closePath();
-                ctx.beginPath();
-                ctx.fillStyle = "rgba(255, 0, 0, 1.0)";
-                ctx.arc(0, 0, 5, 0, Math.PI*2, 0);
-                ctx.fill();
-                ctx.closePath();
-            }
-            else {
-                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-                ctx.beginPath();
-                ctx.fillStyle = "rgba(0, 255, 0, 1.0)";
-                ctx.arc(0, 0, 2, 0, Math.PI*2, 0);
-                ctx.fill();
-                ctx.closePath();
-            }
-            ctx.restore();
-        });
-
-        this.currentFloor.traps.forEach(m => {
-            ctx.save();
-            ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
-            ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-            ctx.beginPath();
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = "#000000AA";
-            ctx.moveTo(-2,-2);
-            ctx.lineTo(2,2);
-            ctx.moveTo(2,-2);
-            ctx.lineTo(-2,2);
-            ctx.stroke();
-            ctx.closePath();
-            ctx.restore();
-        });
-        
-        Object.values(this.currentFloor.treasureMap).filter(t => !t.opened).forEach(t => {
-            const img = DDManager.getImage(t);
-            if (img) {
-                ctx.save();
-                ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
-                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-                ctx.drawImage(img, -5, -5, 10, 10);
-                ctx.restore();
-            }
-        });
-
-        this.currentFloor.locations.forEach(t => {
-            const img = DDManager.getImage(t);
-            if (img) {
-                ctx.save();
-                ctx.translate(t.PosX-this.self.PosX, t.PosY-this.self.PosY);
-                ctx.scale(Math.min(2.0/this.scale, 1.0), Math.min(2.0/this.scale, 1.0));
-                ctx.drawImage(img, -5, -5, 10, 10);
-                ctx.restore();
-            }
-        });
-        ctx.restore();
+    draw(canvasElement) {
+        this.currentFloor.draw(canvasElement, this.scale);
     }
 
     processLogLine(e) {
@@ -519,13 +530,4 @@ class DDManager {
         }
     }
 
-    isDangerMob(bnpcNameID) {
-        return this.currentZone.patrolMobNameIDMap.includes(bnpcNameID);
-    }
-    isMimic(bnpcNameID) {
-        return bnpcNameID == 2566; //ミミック
-    }
-    isPygmaioi(bnpcNameID) {
-        return bnpcNameID == 5041; //ピグマイオイ
-    }
 }

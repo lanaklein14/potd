@@ -1,5 +1,5 @@
 ﻿class Layout {
-    constructor(rooms) {
+    constructor(rooms = []) {
         this.rooms = rooms;
         this.passages = [];
     }
@@ -37,5 +37,21 @@
     draw(ctx, origin, scale) {
         this.rooms.forEach(r=>r.draw(ctx, origin, scale));
         this.passages.forEach(r=>r.draw(ctx, origin));
+    }
+    concat(anotherLayout) {
+        const layout = new Layout();
+        layout.rooms = this.rooms.concat(anotherLayout.rooms);
+        layout.passages = this.passages.concat(anotherLayout.passages);
+        return layout;
+    }
+}
+
+class BossFloorLayout extends Layout {
+    constructor(rooms) {
+        super(rooms);
+        if (this.rooms.length >= 2) {
+            this.passages.push(new Passage(this.rooms[0], this.rooms[1]));
+        }
+        
     }
 }
