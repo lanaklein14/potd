@@ -612,8 +612,8 @@ class DDUtility {
                 5436, //ディープパレス・マロリス
                 5434, //ディープパレス・アークデーモン
             ], new BossFloorLayout([
-                new Room('Exit B160', -320, -327, -281, -288, true),
-                new Room('Boss B160', -326, -246, -275, -195, true),
+                new Room('Exit B160', -316, -317, -285, -285, true),
+                new Room('Boss B160', -326, -262, -275, -211, true),
             
             ])), 
             604: new Zone(604, 161, layout51_80_151_180, [ //B161 - B170
@@ -621,8 +621,8 @@ class DDUtility {
                 5447, //ディープパレス・ビネガロン
                 5448, //ディープパレス・プテラノドン
             ], new BossFloorLayout([
-                new Room('Exit B170', -320, -327, -281, -288, true),
-                new Room('Boss B170', -326, -246, -275, -195, true),
+                new Room('Exit B170', -316, -317, -285, -285, true),
+                new Room('Boss B170', -326, -262, -275, -211, true),
             
             ])), 
             605: new Zone(605, 171, layout51_80_151_180, [ //B171 - B180
@@ -630,8 +630,8 @@ class DDUtility {
                 5451, //ディープパレス・ウィセント
                 5452, //バード・オブ・ディープパレス
             ], new BossFloorLayout([
-                new Room('Exit B180', -320, -327, -281, -288, true),
-                new Room('Boss B180', -326, -246, -275, -195, true),
+                new Room('Exit B180', -316, -317, -285, -285, true),
+                new Room('Boss B180', -326, -262, -275, -211, true),
             
             ])), 
             606: new Zone(606, 181, layout81_100_181_200, [ //B181 - B190
@@ -639,8 +639,8 @@ class DDUtility {
                 5470, //ディープパレス・ガルム
                 5468, //ディープパレス・ヴィンドスルス
             ], new BossFloorLayout([
-                new Room('Exit B190', -320, -327, -281, -288, true),
-                new Room('Boss B190', -326, -246, -275, -195, true),
+                new Room('Exit B190', -316, -317, -285, -285, true),
+                new Room('Boss B190', -326, -262, -275, -211, true),
             
             ])), 
             607: new Zone(607, 191, layout81_100_181_200, [ //B191 - B200
@@ -648,8 +648,8 @@ class DDUtility {
                 5473, //ディープパレス・ファハン
                 5423, //ディープパレス・キーパー
             ], new BossFloorLayout([
-                new Room('Exit B200', -320, -327, -281, -288, true),
-                new Room('Boss B200', -326, -246, -275, -195, true),
+                new Room('Exit B200', -316, -317, -285, -285, true),
+                new Room('Boss B200', -326, -262, -275, -211, true),
             
             ])), 
             570: new Zone(570, 0, layoutExit, []) //Exit Area
