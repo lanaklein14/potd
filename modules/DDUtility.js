@@ -586,8 +586,8 @@ class DDUtility {
                 5382, //ディープパレス・コブラ
                 5383, //ディープパレス・ビロコ
             ], new BossFloorLayout([
-                new Room('Exit B120', -320, -327, -281, -288, true),
-                new Room('Boss B120', -326, -246, -275, -195, true),
+                new Room('Exit B120', -316, -312, -285, -285),
+                new Room('Boss B120', -326, -262, -275, -211),
             
             ])), 
             600: new Zone(600, 121, layout01_50_101_150, [ //B121 - B130
