@@ -390,6 +390,9 @@ class DDManager {
         if (this.currentFloor.floorNumber > 0) {
             header += `B${this.currentFloor.floorNumber}:${this.currentFloor.countKill}${this.currentFloor.passageOk?' 転移OK':''}`;
         }
+        if (header == '') {
+            header = 'Exit'
+        }
         return header;
     }
 
