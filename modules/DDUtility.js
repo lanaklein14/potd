@@ -461,10 +461,11 @@ class Zone {
         if (!this.inDD) {
             return `死者の宮殿の外(Zone:${this.id})`;
         }
-        let header = '死者の宮殿'
-        if (this.baseFloorNumber>0) {
-            header += ` B${this.baseFloorNumber}-B${this.baseFloorNumber+9}`;
-        }
+        //let header = '死者の宮殿'
+        //if (this.baseFloorNumber>0) {
+        //    header += ` B${this.baseFloorNumber}-B${this.baseFloorNumber+9}`;
+        //}
+        let header = '';
         return header;        
     }
 

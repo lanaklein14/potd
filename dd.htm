@@ -6,11 +6,11 @@
     </head>
     <body>
         <div id="app">
-            <div class="ddHeader" v-bind:class='{passageok:ddManager.currentFloor.passageOk}'>{{ddManager.header}}</div>
+            <div id="ddFooter">{{selfPos}}</div>
             <div id="canvasWrapper">
                 <canvas id="canvas"></canvas>
             </div>
-            <div id="ddFooter">{{selfPos}}<span style="float: right" v-on:click="isHidden = !isHidden">▼</span></div>
+            <div class="ddHeader" v-bind:class='{passageok:ddManager.currentFloor.passageOk}'>{{ddManager.header}}<span style="float: right" v-on:click="isHidden = !isHidden">▼</span></div>
             <div id="treasure" v-show="!isHidden" class="debug"></div>
             <div id="trap" v-show="!isHidden" class="debug"></div>
             <!--div id="debug" class="debug"></div-->

@@ -92,7 +92,7 @@
                 try {
                     //const bnpcNameID2 = 4986;// パレス・デスゲイズ
                     //const bnpcNameID = 5461;// デンダインゾネ
-                    const target = e.all.find(c=>c.BnpcNameID==5461 || c.BnpcNameID==4986);
+                    const target = e.all.find(c=>c.BNpcNameID==5461);// || c.BNpcNameID==4986);
                     const hp = hpColors.find(i=>i.hp<(target.HPP*100));
                     maxHp.style.backgroundColor = tinycolor(hp.color).darken(25).toString();
                     currentHp.style.backgroundColor = hp.color;

@@ -388,7 +388,7 @@ class DDManager {
     get header() {
         let header = this.currentZone.title;
         if (this.currentFloor.floorNumber > 0) {
-            header += `(B${this.currentFloor.floorNumber}:${this.currentFloor.countKill}${this.currentFloor.passageOk?'転移OK':''})`;
+            header += `B${this.currentFloor.floorNumber}:${this.currentFloor.countKill}${this.currentFloor.passageOk?' 転移OK':''}`;
         }
         return header;
     }
