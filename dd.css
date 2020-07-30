@@ -23,7 +23,7 @@ html {
 .ddHeader {
     background-color: blue;
     color: white;
-    font-size: 18px;
+    font-size: 15px;
     padding: 3px;
 }
 
@@ -43,7 +43,7 @@ html {
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
     padding: 5px;
-    font: 22px monospace;
+    font: 20px monospace;
 }
 
 pre, #traplist, .debug {

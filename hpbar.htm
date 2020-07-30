@@ -21,13 +21,13 @@
 
             #maxhp {
                 width: 100%;
-                height: 30px;
+                height: 20px;
                 padding: 0px;
                 margin: 0;
                 position: relative;
             }
             #currenthp {
-                height: 30px;
+                height: 20px;
                 padding: 0px;
                 margin: 0;
                 position: absolute;
@@ -90,12 +90,14 @@
                 const player = e.all[0];
                 const targetID = player.TargetID;
                 try {
-                    const target = e.all.find(c=>c.ID==targetID && c.type==2);
+                    //const bnpcNameID2 = 4986;// パレス・デスゲイズ
+                    //const bnpcNameID = 5461;// デンダインゾネ
+                    const target = e.all.find(c=>c.BnpcNameID==5461 || c.BnpcNameID==4986);
                     const hp = hpColors.find(i=>i.hp<(target.HPP*100));
                     maxHp.style.backgroundColor = tinycolor(hp.color).darken(25).toString();
                     currentHp.style.backgroundColor = hp.color;
                     currentHp.style.width = `${target.HPP*100}%`;
-                    label.innerText = `${Math.floor(target.HPP*10000)/100}%`;
+                    label.innerText = `ゾネ：${Math.floor(target.HPP*10000)/100}%`;
                 }
                 catch(e) {
                     maxHp.style.backgroundColor = "transparent";
