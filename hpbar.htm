@@ -74,6 +74,10 @@
             {  hp: 0, color: "red" },
         ]
         window.onload = function() {
+            const maxHp = document.getElementById('maxhp');
+            const currentHp = document.getElementById('currenthp');
+            const label = document.getElementById('label');
+
             document.addEventListener("onOverlayStateUpdate", function (e) {
                 if (!e.detail.isLocked) {
                     document.documentElement.classList.add("resizeHandle");
@@ -85,25 +89,21 @@
             addOverlayListener("onAddonExampleEmbeddedTimerFiredEvent", (e) => {
                 const player = e.all[0];
                 const targetID = player.TargetID;
-                if (targetID != 0) {
+                try {
                     const target = e.all.find(c=>c.ID==targetID);
-                    if (target) {
-                        const hp = hpColors.find(i=>i.hp<(target.HPP*100));
-                        if (hp) {
-                            const maxHp = document.getElementById('maxhp');
-                            const currentHp = document.getElementById('currenthp');
-                            const label = document.getElementById('label');
-                            maxHp.style.backgroundColor = tinycolor(hp.color).darken(25).toString();
-                            currentHp.style.backgroundColor = hp.color;
-                            currentHp.style.width = `${target.HPP*100}%`;
-                            label.innerText = `${target.Name} : ${Math.floor(target.HPP*10000)/100}%`;
-                        }
-                    }
+                    const hp = hpColors.find(i=>i.hp<(target.HPP*100));
+                    maxHp.style.backgroundColor = tinycolor(hp.color).darken(25).toString();
+                    currentHp.style.backgroundColor = hp.color;
+                    currentHp.style.width = `${target.HPP*100}%`;
+                    label.innerText = `${Math.floor(target.HPP*10000)/100}%`;
+                }
+                catch(e) {
+                    maxHp.style.backgroundColor = "transparent";
+                    currentHp.style.backgroundColor = "transparent";
+                    label.innerText = "";
                 }
             });
             startOverlayEvents();
-
-
 
         }
     </script>
