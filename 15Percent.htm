@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="jp">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>HP Bar</title>
+        <style>
+            * {
+                font-family: "Meiryo";
+                font-size: 12px;
+            }
+
+            body, html {
+                margin: 0;
+            }
+
+            html {
+                height: 100%;
+                background-color: transparent;
+                /*background-color: rgba(255, 0, 0, 0.2);*/
+            }
+
+            #maxhp {
+                width: 100%;
+                height: 30px;
+                padding: 0px;
+                margin: 0;
+                position: relative;
+            }
+            #currenthp {
+                height: 30px;
+                padding: 0px;
+                margin: 0;
+                position: absolute;
+            }
+            #label {
+                padding: 5px;
+                color: white;
+                background-color: transparent;
+                position: absolute;
+                font-family: "Helvetica Neue",
+                    Arial,
+                    "Hiragino Kaku Gothic ProN",
+                    "Hiragino Sans",
+                    Meiryo,
+                    sans-serif;
+                font-weight: bold;
+            }
+            .resizeHandle {
+                background-image: url(https://lanaklein14.github.io/potd/handle.png);
+                background-position: bottom right;
+                background-repeat: no-repeat;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="maxhp">
+            <div id="currenthp"></div>
+            <div id="label"></div>
+        </div>
+    </body>
+    <script src="https://ngld.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
+    <script>
+        const hpColors = [
+            {  hp: 51, color: "rgb(126,253,0)" },
+            {  hp: 50, color: "rgb(249,224,6)" },
+            {  hp: 30, color: "rgb(249,224,6)" },
+            {  hp: 29, color: "rgb(234,154,21)" },
+            {  hp: 20, color: "rgb(234,154,21)" },
+            {  hp: 19, color: "rgb(255,55,155)" },
+            {  hp: 15.2, color: "rgb(255,55,155)" },
+            {  hp: 15, color: "red" },
+            {  hp: 0, color: "red" },
+        ]
+        window.onload = function() {
+            const maxHp = document.getElementById('maxhp');
+            const currentHp = document.getElementById('currenthp');
+            const label = document.getElementById('label');
+
+            document.addEventListener("onOverlayStateUpdate", function (e) {
+                if (!e.detail.isLocked) {
+                    document.documentElement.classList.add("resizeHandle");
+                } else {
+                    document.documentElement.classList.remove("resizeHandle");
+                }
+            });
+
+            addOverlayListener("onAddonExampleEmbeddedTimerFiredEvent", (e) => {
+                const player = e.all[0];
+                const targetID = player.TargetID;
+                try {
+                    const target = e.all.find(c=>c.ID==targetID);
+                    const hp = hpColors.find(i=>i.hp<(target.HPP*100));
+                    maxHp.style.backgroundColor = tinycolor(hp.color).darken(25).toString();
+                    currentHp.style.backgroundColor = hp.color;
+                    currentHp.style.width = `${target.HPP*100}%`;
+                    label.innerText = `${target.Name} : ${Math.floor(target.HPP*10000)/100}%`;
+                }
+                catch(e) {
+                    maxHp.style.backgroundColor = "transparent";
+                    currentHp.style.backgroundColor = "transparent";
+                    label.innerText = "";
+                }
+            });
+            startOverlayEvents();
+
+
+
+        }
+    </script>
+</html>
