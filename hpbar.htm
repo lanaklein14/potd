@@ -90,7 +90,7 @@
                 const player = e.all[0];
                 const targetID = player.TargetID;
                 try {
-                    const target = e.all.find(c=>c.ID==targetID);
+                    const target = e.all.find(c=>c.ID==targetID && c.type==2);
                     const hp = hpColors.find(i=>i.hp<(target.HPP*100));
                     maxHp.style.backgroundColor = tinycolor(hp.color).darken(25).toString();
                     currentHp.style.backgroundColor = hp.color;
