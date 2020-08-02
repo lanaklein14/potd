@@ -197,7 +197,7 @@ class Floor {
                 ctx.closePath();
                 ctx.beginPath();
                 ctx.fillStyle = "rgba(0, 255, 0, 0.8)";
-                ctx.arc(0, 0, 4, 0, Math.PI*2, 0);
+                ctx.arc(0, 0, 10, 0, Math.PI*2, 0);
                 ctx.fill();
                 ctx.closePath();
             }
