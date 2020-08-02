@@ -190,14 +190,14 @@ class Floor {
             else if (DDUtility.isSprite(m.BNpcNameID)) {
                 ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
                 ctx.beginPath();
-                ctx.fillStyle = "rgba(0, 255, 0, 1.0)";
-                ctx.arc(0, 0, 2, 0+1.0-m.Heading, Math.PI-1.0-m.Heading);
+                ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
+                ctx.arc(0, 0, 10, 0+1.0-m.Heading, Math.PI-1.0-m.Heading);
                 ctx.lineTo(0,0);
                 ctx.fill();
                 ctx.closePath();
                 ctx.beginPath();
-                ctx.fillStyle = "rgba(0, 255, 0, 0.8)";
-                ctx.arc(0, 0, 10, 0, Math.PI*2, 0);
+                ctx.fillStyle = "rgba(0, 255, 0, 1.0)";
+                ctx.arc(0, 0, 2, 0, Math.PI*2, 0);
                 ctx.fill();
                 ctx.closePath();
             }
