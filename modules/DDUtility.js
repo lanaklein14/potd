@@ -445,6 +445,8 @@ const layoutExit = new Layout([
     new Room('Exit B150', -315, 135, -283, 165),
     new Room('Exit B160', -415, -216, -383, -185),
     new Room('Exit B170', -415, -116, -383, -85),
+    new Room('Exit B180', -415, -16, -383, 15),
+    new Room('Exit B190', -415, 84, -390, 115),
 ]);
 
 class Zone {
@@ -640,18 +642,16 @@ class DDUtility {
                 5451, //ディープパレス・ウィセント
                 5452, //バード・オブ・ディープパレス
             ], new BossFloorLayout([
-                new Room('Exit B180', -316, -317, -285, -285, true),
-                new Room('Boss B180', -326, -262, -275, -211, true),
-            
+                new Room('Exit B180', -309, -364, -292, -349),
+                new Room('Boss B180', -326, -325, -275, -269),
             ])), 
             606: new Zone(606, 181, layout81_100_181_200, [ //B181 - B190
                 5469, //ディープパレス・ワモーラ
                 5470, //ディープパレス・ガルム
                 5468, //ディープパレス・ヴィンドスルス
             ], new BossFloorLayout([
-                new Room('Exit B190', -316, -317, -285, -285, true),
-                new Room('Boss B190', -326, -262, -275, -211, true),
-            
+                new Room('Exit B190', -309, -364, -292, -349),
+                new Room('Boss B190', -326, -325, -275, -275),
             ])), 
             607: new Zone(607, 191, layout81_100_181_200, [ //B191 - B200
                 5475, //ディープパレス・アイアンコース
