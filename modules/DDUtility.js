@@ -673,4 +673,7 @@ class DDUtility {
     static isPygmaioi(bnpcNameID) {
         return bnpcNameID == 5041; //ピグマイオイ
     }
+    static isSprite(bnpcNameID) { 
+        return bnpcNameID == 5479 || bnpcNameID == 5480;
+    }
 }

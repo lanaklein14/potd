@@ -187,6 +187,20 @@ class Floor {
                 ctx.fill();
                 ctx.closePath();
             }
+            else if (DDUtility.isSprite(m.BNpcNameID)) {
+                ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(0, 255, 0, 1.0)";
+                ctx.arc(0, 0, 2, 0+1.0-m.Heading, Math.PI-1.0-m.Heading);
+                ctx.lineTo(0,0);
+                ctx.fill();
+                ctx.closePath();
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(0, 255, 0, 0.8)";
+                ctx.arc(0, 0, 4, 0, Math.PI*2, 0);
+                ctx.fill();
+                ctx.closePath();
+            }
             else {
                 ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
                 ctx.beginPath();
