@@ -34,6 +34,7 @@ class Floor {
         this.traps = [];
         this.locations = [];
         this.activeRoomNames = new Set();
+        this.startRoomName = null;
 
         this.treasureMap = {};
         this.trapMap = {};
@@ -50,6 +51,10 @@ class Floor {
         //ActiveRoomsの更新
         var poss = combatants.filter(c => c.Name != null).map(m=>{return {PosX:m.PosX, PosY:m.PosY}});
         this.zone.layout.rooms.filter(r => poss.some(p=>r.containsPos(p))).forEach(r => this.activeRoomNames.add(r.name));
+        if (this.startRoomName==null) {
+            const startRoom = this.zone.layout.rooms.find(r => r.containsPos(this.self));
+            this.startRoomName = startRoom ? startRoom.name : null;
+        }
         //Mobsの更新
         this.mobs = combatants.filter(c => c.type == 2 && c.BNpcID != 6388 && c.OwnerID == 0);
         //Treasuresの更新
@@ -139,7 +144,7 @@ class Floor {
         ctx.restore();
 
         this.zone.layout.rooms.forEach(r => {
-            r.draw(ctx, this.self, scale, this.activeRoomNames);
+            r.draw(ctx, this.self, scale, this.activeRoomNames, this.startRoomName);
         })
         this.zone.layout.passages.forEach(r => {
             r.draw(ctx, this.self, this.activeRoomNames);
@@ -212,7 +217,7 @@ class Floor {
             ctx.restore();
         });
 
-        this.traps.forEach(m => {
+        Object.values(this.trapMap).filter(t => !t.treasure).forEach(m => {
             ctx.save();
             ctx.translate(m.PosX-this.self.PosX, m.PosY-this.self.PosY);
             ctx.scale(Math.min(2.0/this, 1.0), Math.min(2.0/scale, 1.0));

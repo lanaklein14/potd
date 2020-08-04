@@ -34,7 +34,7 @@
         }
     }
 
-    draw(ctx, origin, scale, activeRoomNames=null) {
+    draw(ctx, origin, scale, activeRoomNames=null, startRoomName=null) {
         if (activeRoomNames == null || activeRoomNames.has(this.name)) {
             ctx.save();
             ctx.translate(-origin.PosX, -origin.PosY);
@@ -44,37 +44,46 @@
             ctx.fillText(this.name ? this.name : '', this.left, this.top-1);
             ctx.restore();
 
-            if (this.traps) {
-                this.traps.forEach(t=>{
-                    ctx.save();
-                    ctx.translate(t.PosX-origin.PosX, t.PosY-origin.PosY);
-                    ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
-                    ctx.beginPath();
-                    ctx.strokeStyle = "#008888FF";
-                    ctx.moveTo(-2,-2);
-                    ctx.lineTo(2,2);
-                    ctx.moveTo(2,-2);
-                    ctx.lineTo(-2,2);
-                    ctx.stroke();
-                    ctx.closePath();
-                    ctx.restore();
-                });
+            if (this.name==startRoomName) {
+                ctx.save();
+                ctx.translate(-origin.PosX, -origin.PosY);
+                ctx.strokeStyle = "#008888FF";
+                ctx.strokeRect(this.left, this.top, this.right-this.left, this.bottom-this.top);
+                ctx.restore();
             }
-            if (this.accursedHoards) {
-                this.accursedHoards.forEach(t=>{
-                    ctx.save();
-                    ctx.translate(t.PosX-origin.PosX, t.PosY-origin.PosY);
-                    ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
-                    ctx.beginPath();
-                    ctx.strokeStyle = "#888800FF";
-                    ctx.moveTo(0,-3);
-                    ctx.lineTo(0,3);
-                    ctx.moveTo(3,0);
-                    ctx.lineTo(-3,0);
-                    ctx.stroke();
-                    ctx.closePath();
-                    ctx.restore();
-                });
+            else {
+                if (this.traps) {
+                    this.traps.forEach(t=>{
+                        ctx.save();
+                        ctx.translate(t.PosX-origin.PosX, t.PosY-origin.PosY);
+                        ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                        ctx.beginPath();
+                        ctx.strokeStyle = "#008888FF";
+                        ctx.moveTo(-2,-2);
+                        ctx.lineTo(2,2);
+                        ctx.moveTo(2,-2);
+                        ctx.lineTo(-2,2);
+                        ctx.stroke();
+                        ctx.closePath();
+                        ctx.restore();
+                    });
+                }
+                if (this.accursedHoards) {
+                    this.accursedHoards.forEach(t=>{
+                        ctx.save();
+                        ctx.translate(t.PosX-origin.PosX, t.PosY-origin.PosY);
+                        ctx.scale(Math.min(2.0/scale, 1.0), Math.min(2.0/scale, 1.0));
+                        ctx.beginPath();
+                        ctx.strokeStyle = "#888800FF";
+                        ctx.moveTo(0,-3);
+                        ctx.lineTo(0,3);
+                        ctx.moveTo(3,0);
+                        ctx.lineTo(-3,0);
+                        ctx.stroke();
+                        ctx.closePath();
+                        ctx.restore();
+                    });
+                }
             }
         }
         else {
