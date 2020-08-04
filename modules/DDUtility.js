@@ -325,7 +325,7 @@ layout51_80_151_180.addPassage('B16', 'B17');
 layout51_80_151_180.addPassage('B17', 'B18');
 layout51_80_151_180.addPassage('C1', 'C2');
 
-const layout81_100_181_200 = new Layout([
+const layout81_100_181_190 = new Layout([
     new Room('A1', 230, -416, 253, -385), //見直しOK
     new Room('A2', 270, -434, 310, -398), //見直しOK
     new Room('A3', 361, -426, 407, -390, true),
@@ -376,56 +376,150 @@ const layout81_100_181_200 = new Layout([
     new Room('D1', 284, 173, 311, 200), //見直しOK
     new Room('D2', 275, 272, 324, 324), //見直しOK
 ]);
-layout81_100_181_200.addPassage('A1', 'A5');
-layout81_100_181_200.addPassage('A2', 'A6');
-layout81_100_181_200.addPassage('A3', 'A7');
-layout81_100_181_200.addPassage('A5', 'A10');
-layout81_100_181_200.addPassage('A6', 'A11');
-layout81_100_181_200.addPassage('A7', 'A12');
-//layout81_100_181_200.addPassage('A10', 'A15');
-layout81_100_181_200.addPassage('A11', 'A16');
-layout81_100_181_200.addPassage('A12', 'A17');
-layout81_100_181_200.addPassage('A15', 'A19');
-layout81_100_181_200.addPassage('A16', 'A20');
-layout81_100_181_200.addPassage('A17', 'A21');
-layout81_100_181_200.addPassage('A4', 'A5');
-layout81_100_181_200.addPassage('A5', 'A6');
-layout81_100_181_200.addPassage('A6', 'A7');
-layout81_100_181_200.addPassage('A7', 'A8');
-layout81_100_181_200.addPassage('A9', 'A10');
-layout81_100_181_200.addPassage('A10', 'A11');
-layout81_100_181_200.addPassage('A11', 'A12');
-layout81_100_181_200.addPassage('A12', 'A13');
-layout81_100_181_200.addPassage('A14', 'A15');
-layout81_100_181_200.addPassage('A15', 'A16');
-layout81_100_181_200.addPassage('A16', 'A17');
-layout81_100_181_200.addPassage('A17', 'A18');
-layout81_100_181_200.addPassage('B1', 'B5');
-layout81_100_181_200.addPassage('B2', 'B6');
-layout81_100_181_200.addPassage('B3', 'B7');
-layout81_100_181_200.addPassage('B5', 'B10');
-layout81_100_181_200.addPassage('B6', 'B11');
-layout81_100_181_200.addPassage('B7', 'B12');
-layout81_100_181_200.addPassage('B10', 'B15');
-layout81_100_181_200.addPassage('B11', 'B16');
-layout81_100_181_200.addPassage('B12', 'B17');
-layout81_100_181_200.addPassage('B15', 'B19');
-layout81_100_181_200.addPassage('B16', 'B20');
-layout81_100_181_200.addPassage('B17', 'B21');
-layout81_100_181_200.addPassage('B4', 'B5');
-layout81_100_181_200.addPassage('B5', 'B6');
-layout81_100_181_200.addPassage('B6', 'B7');
-layout81_100_181_200.addPassage('B7', 'B8');
-layout81_100_181_200.addPassage('B9', 'B10');
-layout81_100_181_200.addPassage('B10', 'B11');
-layout81_100_181_200.addPassage('B11', 'B12');
-layout81_100_181_200.addPassage('B12', 'B13');
-layout81_100_181_200.addPassage('B14', 'B15');
-//layout81_100_181_200.addPassage('B15', 'B16');
-//layout81_100_181_200.addPassage('B16', 'B17');
-layout81_100_181_200.addPassage('B17', 'B18');
-layout81_100_181_200.addPassage('C1', 'C2');
-layout81_100_181_200.addPassage('D1', 'D2');
+layout81_100_181_190.addPassage('A1', 'A5');
+layout81_100_181_190.addPassage('A2', 'A6');
+layout81_100_181_190.addPassage('A3', 'A7');
+layout81_100_181_190.addPassage('A5', 'A10');
+layout81_100_181_190.addPassage('A6', 'A11');
+layout81_100_181_190.addPassage('A7', 'A12');
+//layout81_100_181_190.addPassage('A10', 'A15');
+layout81_100_181_190.addPassage('A11', 'A16');
+layout81_100_181_190.addPassage('A12', 'A17');
+layout81_100_181_190.addPassage('A15', 'A19');
+layout81_100_181_190.addPassage('A16', 'A20');
+layout81_100_181_190.addPassage('A17', 'A21');
+layout81_100_181_190.addPassage('A4', 'A5');
+layout81_100_181_190.addPassage('A5', 'A6');
+layout81_100_181_190.addPassage('A6', 'A7');
+layout81_100_181_190.addPassage('A7', 'A8');
+layout81_100_181_190.addPassage('A9', 'A10');
+layout81_100_181_190.addPassage('A10', 'A11');
+layout81_100_181_190.addPassage('A11', 'A12');
+layout81_100_181_190.addPassage('A12', 'A13');
+layout81_100_181_190.addPassage('A14', 'A15');
+layout81_100_181_190.addPassage('A15', 'A16');
+layout81_100_181_190.addPassage('A16', 'A17');
+layout81_100_181_190.addPassage('A17', 'A18');
+layout81_100_181_190.addPassage('B1', 'B5');
+layout81_100_181_190.addPassage('B2', 'B6');
+layout81_100_181_190.addPassage('B3', 'B7');
+layout81_100_181_190.addPassage('B5', 'B10');
+layout81_100_181_190.addPassage('B6', 'B11');
+layout81_100_181_190.addPassage('B7', 'B12');
+layout81_100_181_190.addPassage('B10', 'B15');
+layout81_100_181_190.addPassage('B11', 'B16');
+layout81_100_181_190.addPassage('B12', 'B17');
+layout81_100_181_190.addPassage('B15', 'B19');
+layout81_100_181_190.addPassage('B16', 'B20');
+layout81_100_181_190.addPassage('B17', 'B21');
+layout81_100_181_190.addPassage('B4', 'B5');
+layout81_100_181_190.addPassage('B5', 'B6');
+layout81_100_181_190.addPassage('B6', 'B7');
+layout81_100_181_190.addPassage('B7', 'B8');
+layout81_100_181_190.addPassage('B9', 'B10');
+layout81_100_181_190.addPassage('B10', 'B11');
+layout81_100_181_190.addPassage('B11', 'B12');
+layout81_100_181_190.addPassage('B12', 'B13');
+layout81_100_181_190.addPassage('B14', 'B15');
+//layout81_100_181_190.addPassage('B15', 'B16');
+//layout81_100_181_190.addPassage('B16', 'B17');
+layout81_100_181_190.addPassage('B17', 'B18');
+layout81_100_181_190.addPassage('C1', 'C2');
+layout81_100_181_190.addPassage('D1', 'D2');
+
+const layout191_200 = new Layout([
+    new Room('A1', 223, -423, 260, -386, true), //
+    new Room('A2', 269, -435, 314, -399, true), //
+    new Room('A3', 369, -423, 406, -386, true), //
+    new Room('A4', 180, -364, 217, -328, true), //
+    new Room('A5', 235, -364, 271, -328, true), //
+    new Room('A6', 294, -376, 329, -341, true), //
+    new Room('A7', 350, -364, 386, -328, true), //
+    new Room('A8', 409, -383, 444, -338, true), //
+    new Room('A9', 165, -319, 202, -282, true), //
+    new Room('A10', 224, -306, 259, -270, true), //
+    new Room('A11', 282, -318, 317, -283, true), //
+    new Room('A12', 346, -318, 389, -282, true), //
+    new Room('A13', 412, -331, 448, -294, true), //
+    new Room('A14', 165, -249, 202, -212, true), //
+    new Room('A15', 224, -261, 259, -224, true), //
+    new Room('A16', 282, -260, 317, -225, true), //
+    new Room('A17', 348, -273, 383, -237, true), //
+    new Room('A18', 401, -273, 438, -236, true), //
+    new Room('A19', 223, -206, 260, -162, true), //
+    new Room('A20', 301, -202, 338, -166, true), //
+    new Room('A21', 359, -214, 395, -178, true), //
+
+    new Room('B1', -394, 169, -357, 206, true), //
+    new Room('B2', -307, 162, -270, 206, true), //
+    new Room('B3', -242, 182, -205, 217, true), //
+    new Room('B4', -420, 225, -383, 262, true), //
+    new Room('B5', -374, 226, -338, 261, true), //
+    new Room('B6', -318, 225, -283, 262, true), //
+    new Room('B7', -254, 238, -217, 274, true), //
+    new Room('B8', -201, 238, -157, 274, true), //
+    new Room('B9', -438, 281, -403, 318, true), //
+    new Room('B10', -384, 283, -350, 317, true), //
+    new Room('B11', -318, 278, -283, 321, true), //
+    new Room('B12', -253, 296, -217, 331, true), //
+    new Room('B13', -199, 291, -164, 336, true), //
+    new Room('B14', -428, 339, -392, 376, true), //
+    new Room('B15', -374, 340, -337, 376, true), //
+    new Room('B16', -318, 340, -282, 375, true), //
+    new Room('B17', -254, 352, -218, 387, true), //
+    new Room('B18', -198, 351, -163, 388, true), //
+    new Room('B19', -385, 396, -346, 431, true), //
+    new Room('B20', -339, 397, -302, 433, true), //
+    new Room('B21', -242, 407, -205, 444, true), //
+]);
+layout191_200.addPassage('A1', 'A5');
+layout191_200.addPassage('A2', 'A6');
+layout191_200.addPassage('A3', 'A7');
+layout191_200.addPassage('A5', 'A10');
+layout191_200.addPassage('A6', 'A11');
+layout191_200.addPassage('A7', 'A12');
+//layout191_200.addPassage('A10', 'A15');
+layout191_200.addPassage('A11', 'A16');
+layout191_200.addPassage('A12', 'A17');
+layout191_200.addPassage('A15', 'A19');
+layout191_200.addPassage('A16', 'A20');
+layout191_200.addPassage('A17', 'A21');
+layout191_200.addPassage('A4', 'A5');
+layout191_200.addPassage('A5', 'A6');
+layout191_200.addPassage('A6', 'A7');
+layout191_200.addPassage('A7', 'A8');
+layout191_200.addPassage('A9', 'A10');
+layout191_200.addPassage('A10', 'A11');
+layout191_200.addPassage('A11', 'A12');
+layout191_200.addPassage('A12', 'A13');
+layout191_200.addPassage('A14', 'A15');
+layout191_200.addPassage('A15', 'A16');
+layout191_200.addPassage('A16', 'A17');
+layout191_200.addPassage('A17', 'A18');
+layout191_200.addPassage('B1', 'B5');
+layout191_200.addPassage('B2', 'B6');
+layout191_200.addPassage('B3', 'B7');
+layout191_200.addPassage('B5', 'B10');
+layout191_200.addPassage('B6', 'B11');
+layout191_200.addPassage('B7', 'B12');
+layout191_200.addPassage('B10', 'B15');
+layout191_200.addPassage('B11', 'B16');
+layout191_200.addPassage('B12', 'B17');
+layout191_200.addPassage('B15', 'B19');
+layout191_200.addPassage('B16', 'B20');
+layout191_200.addPassage('B17', 'B21');
+layout191_200.addPassage('B4', 'B5');
+layout191_200.addPassage('B5', 'B6');
+layout191_200.addPassage('B6', 'B7');
+layout191_200.addPassage('B7', 'B8');
+layout191_200.addPassage('B9', 'B10');
+layout191_200.addPassage('B10', 'B11');
+layout191_200.addPassage('B11', 'B12');
+layout191_200.addPassage('B12', 'B13');
+layout191_200.addPassage('B14', 'B15');
+//layout191_200.addPassage('B15', 'B16');
+//layout191_200.addPassage('B16', 'B17');
+layout191_200.addPassage('B17', 'B18');
 
 const layoutExit = new Layout([
     new Room('Exit B10', -123, 81, -78, 118),
@@ -557,7 +651,7 @@ class DDUtility {
                 new Room('Boss B80', -326, -246, -275, -195),
             
             ])), 
-            596: new Zone(596, 81, layout81_100_181_200, [ //B81 - B90
+            596: new Zone(596, 81, layout81_100_181_190, [ //B81 - B90
                 5343, //パレス・ワモーラ
                 5342, //パレス・ハパリット
                 5344, //パレス・キマイラ
@@ -566,7 +660,7 @@ class DDUtility {
                 new Room('Boss B90', -326, -261, -275, -211),
             
             ])), 
-            597: new Zone(597, 91, layout81_100_181_200, [ //B91 - B100
+            597: new Zone(597, 91, layout81_100_181_190, [ //B91 - B100
                 5354, //パレス・レイス
                 5353, //パレス・アイアンコース
                 5355, //パレス・グレイブキーパー
@@ -645,7 +739,7 @@ class DDUtility {
                 new Room('Exit B180', -309, -364, -292, -349),
                 new Room('Boss B180', -326, -325, -275, -269),
             ])), 
-            606: new Zone(606, 181, layout81_100_181_200, [ //B181 - B190
+            606: new Zone(606, 181, layout81_100_181_190, [ //B181 - B190
                 5469, //ディープパレス・ワモーラ
                 5470, //ディープパレス・ガルム
                 5468, //ディープパレス・ヴィンドスルス
@@ -653,7 +747,7 @@ class DDUtility {
                 new Room('Exit B190', -309, -364, -292, -349),
                 new Room('Boss B190', -326, -325, -275, -275),
             ])), 
-            607: new Zone(607, 191, layout81_100_181_200, [ //B191 - B200
+            607: new Zone(607, 191, layout191_200, [ //B191 - B200
                 5475, //ディープパレス・アイアンコース
                 5473, //ディープパレス・ファハン
                 5423, //ディープパレス・キーパー
