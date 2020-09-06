@@ -26,6 +26,8 @@ class Floor {
         this.changing = changing;
 
         this.countKill = 0;
+        this.countKill2 = 0;
+        this.countNeedToKill = 0;
         this.passageOk = false;
 
         this.self = {PosX:0, PosY:0, Heading:0};
@@ -360,6 +362,8 @@ class Floor {
 
 class DDManager {
     constructor() {
+        this.doReport = false;
+        this.floorSummaries = [];
         this.currentZone = DDUtility.getZone(-1);
         this.currentFloor = new Floor(this.currentZone, -1);
         this.currentRoomName = '';
@@ -419,7 +423,39 @@ class DDManager {
         return `${this.currentRoomName}(X:${Math.floor(this.self.PosX)},Y:${Math.floor(this.self.PosY)})`
     }
 
+    floorSummary() {
+        if (this.doReport) {
+/*            this.floorSummaries.push(
+                `B${this.currentFloor.floorNumber}, ${this.currentFloor.countNeedToKill}, ${this.currentFloor.countKill}`)
+            const payload = {
+                content: `フロア, 必要討伐数, 討伐数\r`
+            }
+            
+            payload.content += this.floorSummaries.join('\r');
+*/
+this.floorSummaries.push(
+    {
+        floor: `B${this.currentFloor.floorNumber}`, 
+        needKill: this.currentFloor.countNeedToKill
+    }
+)
+const payload = {
+    content: `${this.floorSummaries.map(s=>s.floor).join(', ')}\r${this.floorSummaries.map(s=>s.needKill).join(', ')}`
+}
+            const url = 'https://discordapp.com/api/webhooks/742217513869508645/v4KgcnEnfVPJI--4_I07Lv1OksnATzjNzuEgmOyg-Lcriaf1W-xaBXzLH27Y9FIUhmz9';
+            fetch(url, {
+                method: "POST", // *GET, POST, PUT, DELETE, etc.
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: JSON.stringify(payload), // 本文のデータ型は "Content-Type" ヘッダーと一致する必要があります
+            })
+        }
+    }
+
     floorChanging() {
+        this.floorSummary();
         const tmp = this.currentFloor.floorNumber + 1;
         this.currentFloor = new Floor(this.currentZone, tmp, true);
     }
@@ -472,6 +508,8 @@ class DDManager {
                 ];
                 if (result1) {
                     console.log(e);
+                    this.doReport = true;
+                    this.floorSummaries = [];
                     this.floorChanged(parseInt(result1[1], 10));
                 }
                 else if (result2) {
@@ -480,6 +518,7 @@ class DDManager {
                 }
                 else if (result3) {
                     console.log(e);
+                    this.currentFloor.countNeedToKill = this.currentFloor.countKill + 1; //(kill log comes after)
                     this.currentFloor.passageOk = true;
                 }
                 else if (result4) {
@@ -534,8 +573,12 @@ class DDManager {
             }
             else if (e.line[2] == '0b3a' && e.line[4].match(/.*を倒した。$/)) {
                 console.log(e);
-                this.currentFloor.countKill += 1;
+                this.currentFloor.countKill2 += 1;
                 //window.callOverlayHandler({ call: 'addonExampleSay', text: e.line[4] })
+            }
+            else if (e.line[2] == '0840' && e.line[4].match(/.*ポイントの経験値を得た。$/)) {
+                console.log(e);
+                this.currentFloor.countKill += 1;
             }
         }
         else if (e.line[0] == '21' && e.line[3] == 'トラップ') {
